@@ -63,6 +63,6 @@ Aqui estão as seguintes tecnologias que utilizamos:
 
 ## Modelo de Dados
 
-<img src="/doc/assets/modeloLogico.jpg alt="Modelo Lógico do Banco de Dados">
+<img src="/doc/assets/modeloLogico.jpg" alt="Modelo Lógico do Banco de Dados">
 
 [➳ Retornar ao início](#Sumário)
