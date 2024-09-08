@@ -61,7 +61,7 @@ Aqui estão as seguintes tecnologias que utilizamos:
 
 ## Protótipo navegável
 
-[![Protótipo MindCare](doc/assets/prototipo.jpg)](https://www.figma.com/design/gaXVVA2U5GE9fN5eV7eZlH/MindCare?node-id=223-3&m=dev&t=F2xUlg3IW8UyaIJP-1)
+[![Protótipo MindCare](doc/assets/prototipo.jpg)](https://www.figma.com/proto/gaXVVA2U5GE9fN5eV7eZlH/MindCare?node-id=202-4&node-type=FRAME&t=VeZMjJBzqGrUvI4Y-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=223%3A58)
 
 ## Modelo de Dados
 
