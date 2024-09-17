@@ -1,34 +1,47 @@
-import { StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import EmojiGrid from '../components/EmojiGrid';
+import BottomBar from '../components/navigation/BottomBar'; // Importe o componente BottomBar
 
 export default function Page() {
   return (
-    <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>Olá</Text>
-        <Text style={styles.subtitle}>Testando</Text>
+    <ImageBackground 
+      source={require('../assets/images/fundoHome.png')}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <Text style={styles.greeting}>Bom dia, Gerson!</Text>
+        <Text style={styles.question}>Qual o sentimento de hoje?</Text>
+
+        <EmojiGrid />
+
+        <BottomBar /> 
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', 
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
     justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
+    alignItems: "center",
+    paddingHorizontal: 24, 
   },
-  title: {
-    fontSize: 64,
+  greeting: {
+    fontSize: 32, 
     fontWeight: "bold",
+    marginBottom: 10,
+    color: 'white', 
   },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+  question: {
+    fontSize: 24, 
+    marginBottom: 20,
+    color: 'white', 
   },
 });
