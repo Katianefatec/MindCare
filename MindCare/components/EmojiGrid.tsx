@@ -1,16 +1,17 @@
 import React from 'react';
-import { View, TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; // Importe o conjunto de ícones que você deseja usar
 
 const EmojiGrid = () => {
   const emojis = [
-    { name: 'Alegria', image: require('../assets/images/alegria.png') },
-    { name: 'Calma', image: require('../assets/images/calma.png') },
-    { name: 'Amor', image: require('../assets/images/amor.png') },
-    { name: 'Cansaco', image: require('../assets/images/cansaco.png') },    
-    { name: 'Medo', image: require('../assets/images/medo.png') },
-    { name: 'Tristeza', image: require('../assets/images/tristeza.png') },
-    { name: 'Aflição', image: require('../assets/images/aflicao.png') },
-    { name: 'Raiva', image: require('../assets/images/raiva.png') },
+    { name: 'Alegria', icon: 'emoticon-excited-outline', color: '#FFD700' },
+    { name: 'Calma', icon: 'emoticon-happy-outline', color: '#00BFFF' },
+    { name: 'Amor', icon: 'emoticon-kiss-outline', color: '#FF69B4' },
+    { name: 'Cansaço', icon: 'emoticon-neutral-outline', color: '#A9A9A9' },    
+    { name: 'Medo', icon: 'emoticon-frown-outline', color: '#8B0000' },
+    { name: 'Tristeza', icon: 'emoticon-sad-outline', color: '#1E90FF' },
+    { name: 'Aflição', icon: 'emoticon-cry-outline', color: '#FF4500' },
+    { name: 'Raiva', icon: 'emoticon-angry-outline', color: '#DC143C' },
   ];
 
   const handleEmojiPress = (emojiName) => {
@@ -25,8 +26,10 @@ const EmojiGrid = () => {
           style={styles.emojiButton} 
           onPress={() => handleEmojiPress(emoji.name)}
         >
-          <Image source={emoji.image} style={styles.emojiImage} />
-          <Text style={styles.emojiLabel}>{emoji.name}</Text>
+          <View style={styles.emojiBox}>
+            <MaterialCommunityIcons name={emoji.icon} size={40} color={emoji.color} />
+            <Text style={styles.emojiLabel}>{emoji.name}</Text>
+          </View>
         </TouchableOpacity>
       ))}
     </View>
@@ -43,14 +46,25 @@ const styles = StyleSheet.create({
   emojiButton: {
     alignItems: 'center',
     marginBottom: 10,
+    width: '45%', // Ajuste a largura para garantir duas colunas
   },
-  emojiImage: {
-    width: 50,
-    height: 50,
+  emojiBox: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 100, // Defina uma largura fixa
+    height: 100, // Defina uma altura fixa
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   emojiLabel: {
     fontSize: 12,
-    marginTop: 5,
+    marginTop: 4,
   },
 });
 

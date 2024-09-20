@@ -5,15 +5,36 @@ const BottomBar = () => {
   const icons = [
     { name: 'Home', image: require('../../assets/images/botao-home.png') },
     { name: 'Diario', image: require('../../assets/images/diario.png') },    
-    { name: 'Lista', image: require('../../assets/images/avaliacao.png') },
-    { name: 'Ajuda', image: require('../../assets/images/apoio.png') },
+    { name: 'Avaliacao', image: require('../../assets/images/avaliacao.png') },
+    { name: 'Apoio', image: require('../../assets/images/apoio.png') },
     { name: 'Perfil', image: require('../../assets/images/perfil.png') },
     { name: 'CalmaMenu', image: require('../../assets/images/calmaMenu.png') },
   ];
 
   const handleIconPress = (iconName) => {
     console.log(`Ícone ${iconName} pressionado!`);
-    // Aqui você pode adicionar a lógica de navegação ou ação para cada ícone
+
+    if (iconName === 'CalmaMenu') {
+      // Lógica para o botão CalmaMenu
+    }
+
+    if (iconName === 'Diario') {
+      // Lógica para o botão Diário
+    }
+
+    if (iconName === 'Avaliacao') {
+      // Lógica para o botão Avaliação
+    }
+
+    if (iconName === 'Apoio') {
+      // Lógica para o botão Apoio
+    }
+
+    if (iconName === 'Perfil') {
+      // Lógica para o botão Perfil
+    }
+    
+   
   };
 
   return (
@@ -36,10 +57,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
+   
     paddingVertical: 10,
-    marginTop: 20,
+    backgroundColor: '#307B86', 
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   iconButton: {
     padding: 10,
@@ -47,6 +70,7 @@ const styles = StyleSheet.create({
   iconImage: {
     width: 24,
     height: 24,
+    tintColor: 'white',
   },
 });
 
