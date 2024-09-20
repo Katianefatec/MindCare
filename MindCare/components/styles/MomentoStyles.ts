@@ -5,7 +5,7 @@ const momentoStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: 40,
+    marginTop: 60,
   },
   emojiButton: {
     alignItems: 'center',
@@ -14,7 +14,7 @@ const momentoStyles = StyleSheet.create({
   },
   emojiBox: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: 15,
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',

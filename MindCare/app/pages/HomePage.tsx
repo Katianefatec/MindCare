@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, View, ImageBackground } from 'react-native';
-import EmojiGrid from '../EmojiGrid';
-import BottomBar from '../BottomBar';
-import homePageStyles from '../styles/HomePageStyles';
+import { ImageBackground, Text, View } from 'react-native';
+import BottomBar from '../../components/navigation/BottomBar';
+import EmojiGrid from '../../components/navigation/EmojiGrid';
+import homePageStyles from './styles/HomePageStyles';
 
 const HomePage = () => {
   return (

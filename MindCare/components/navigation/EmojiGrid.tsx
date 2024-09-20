@@ -1,9 +1,12 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-import emojiGridStyles from './styles/EmojiGridStyles'; // Importe o estilo
+import { Text, TouchableOpacity, View } from 'react-native';
+import emojiGridStyles from '../styles/EmojiGridStyles'; // Importe o estilo
 
 const EmojiGrid = () => {
+  const router = useRouter(); // Use o hook de navegação
+
   const emojis = [
     { name: 'Alegria', icon: 'emoticon-excited-outline', color: '#FFD700' },
     { name: 'Calma', icon: 'emoticon-happy-outline', color: '#00BFFF' },
@@ -16,7 +19,8 @@ const EmojiGrid = () => {
   ];
 
   const handleEmojiPress = (emojiName) => {
-    console.log(`Emoji ${emojiName} pressionado!`);     
+    console.log(`Emoji ${emojiName} pressionado!`);
+    router.push('/pages/HomePage2'); 
   };
 
   return (

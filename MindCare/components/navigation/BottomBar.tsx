@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
-import bottomBarStyles from './styles/BottomBarStyles'; 
+import { Image, TouchableOpacity, View } from 'react-native';
+import bottomBarStyles from '../styles/BottomBarStyles';
 
 const BottomBar = () => {
   const icons = [
-    { name: 'Home', image: require('../assets/images/botao-home.png') },
-    { name: 'Diario', image: require('../assets/images/diario.png') },    
-    { name: 'Avaliacao', image: require('../assets/images/avaliacao.png') },
-    { name: 'Apoio', image: require('../assets/images/apoio.png') },
-    { name: 'Perfil', image: require('../assets/images/perfil.png') },
-    { name: 'CalmaMenu', image: require('../assets/images/calmaMenu.png') },
+    { name: 'Home', image: require('../../assets/images/botao-home.png') },
+    { name: 'Diario', image: require('../../assets/images/diario.png') },    
+    { name: 'Avaliacao', image: require('../../assets/images/avaliacao.png') },
+    { name: 'Apoio', image: require('../../assets/images/apoio.png') },
+    { name: 'Perfil', image: require('../../assets/images/perfil.png') },
+    { name: 'CalmaMenu', image: require('../../assets/images/calmaMenu.png') },
   ];
 
   const handleIconPress = (iconName) => {

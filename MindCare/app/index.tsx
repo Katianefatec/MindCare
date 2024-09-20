@@ -1,8 +1,7 @@
 import React from 'react';
-import HomePage from '../components/navigation/HomePage';
-import Momento from '@/components/Momento';
-import HomePage2 from '@/components/navigation/HomePage2';
+import Layout from './_layout';
+import HomePage from './pages/HomePage';
 
 export default function App() {
-  return <HomePage2 />;
+  return <HomePage />;
 }

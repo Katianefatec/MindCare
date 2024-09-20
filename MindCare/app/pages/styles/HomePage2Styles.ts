@@ -11,7 +11,7 @@ const homePage2Styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20, 
-    paddingVertical: 130,
+    paddingVertical: 120,
   },
   greeting: {
     fontSize: 30, 
