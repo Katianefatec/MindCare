@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const homePage2Styles = StyleSheet.create({
+const reflexaoPageStyles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover', 
@@ -22,4 +22,4 @@ const homePage2Styles = StyleSheet.create({
   },  
 });
 
-export default homePage2Styles;
+export default reflexaoPageStyles;

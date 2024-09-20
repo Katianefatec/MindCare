@@ -1,57 +1,57 @@
 import React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; // Importe a biblioteca de ícones
 import bottomBarStyles from '../styles/BottomBarStyles';
+import { router } from 'expo-router';
 
 const BottomBar = () => {
-  const icons = [
-    { name: 'Home', image: require('../../assets/images/botao-home.png') },
-    { name: 'Diario', image: require('../../assets/images/diario.png') },    
-    { name: 'Avaliacao', image: require('../../assets/images/avaliacao.png') },
-    { name: 'Apoio', image: require('../../assets/images/apoio.png') },
-    { name: 'Perfil', image: require('../../assets/images/perfil.png') },
-    { name: 'CalmaMenu', image: require('../../assets/images/calmaMenu.png') },
+  const icons: { name: string; icon: 'home-outline' | 'lightbulb-outline' | 'meditation' | 'hand-heart-outline' | 'account-outline'; color: string }[] = [
+    { name: 'Home', icon: 'home-outline', color: '#194146' },
+    { name: 'Reflexão', icon: 'lightbulb-outline', color: '#194146' },
+    { name: 'CalmaMenu', icon: 'meditation', color: '#194146' },
+    { name: 'Apoio', icon: 'hand-heart-outline', color: '#194146' },
+    { name: 'Perfil', icon: 'account-outline', color: '#194146' },
   ];
 
-  const handleIconPress = (iconName) => {
+  const handleIconPress = (iconName: string) => {
     console.log(`Ícone ${iconName} pressionado!`);
 
-    if (iconName === 'CalmaMenu') {
-      // Lógica para o botão CalmaMenu
+    if (iconName==='Home') {
+      router.push('/pages/HomePage'); 
     }
 
-    if (iconName === 'Diario') {
-      // Lógica para o botão Diário
+    if (iconName === 'CalmaMenu') {
+      router.push('/pages/Calma'); 
+    }
+
+    if (iconName === 'Reflexão') {
+      router.push('/pages/ReflexaoPage'); 
     }
 
     if (iconName === 'Avaliacao') {
-      // Lógica para o botão Avaliação
-    }
+      router.push('/pages/Avaliacao');     }
 
     if (iconName === 'Apoio') {
-      // Lógica para o botão Apoio
+      router.push('/pages/Apoio'); 
     }
 
     if (iconName === 'Perfil') {
-      // Lógica para o botão Perfil
-    }
-    
-   
+      router.push('/pages/Perfil');     }
   };
 
   return (
     <View style={bottomBarStyles.bottomBar}>
       {icons.map((icon) => (
         <TouchableOpacity 
-          key={icon.name} 
-          style={bottomBarStyles.iconButton} 
+          key={icon.name}           
           onPress={() => handleIconPress(icon.name)}
         >
-          <Image source={icon.image} style={bottomBarStyles.iconImage} />
+          <MaterialCommunityIcons name={icon.icon} size={35} color={icon.color} />
+          
         </TouchableOpacity>
       ))}
     </View>
   );
 };
-
 
 export default BottomBar;

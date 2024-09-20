@@ -1,6 +1,6 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import momentoStyles from '../styles/MomentoStyles';
 
 const Momento = () => {
@@ -11,7 +11,7 @@ const Momento = () => {
     { name: 'Apoio', icon: 'hand-heart-outline', color: '#A9A9A9' },        
   ];
 
-  const handleMomentoPress = (momentoName) => {
+  const handleMomentoPress = (momentoName: string) => {
     console.log(`Emoji ${momentoName} pressionado!`);     
   };
 
