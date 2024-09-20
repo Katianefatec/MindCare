@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; // Importe o conjunto de ícones que você deseja usar
+import { View, TouchableOpacity, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import emojiGridStyles from './styles/EmojiGridStyles'; // Importe o estilo
 
 const EmojiGrid = () => {
   const emojis = [
@@ -19,53 +20,21 @@ const EmojiGrid = () => {
   };
 
   return (
-    <View style={styles.emojiGrid}>
+    <View style={emojiGridStyles.emojiGrid}>
       {emojis.map((emoji) => (
         <TouchableOpacity 
           key={emoji.name} 
-          style={styles.emojiButton} 
+          style={emojiGridStyles.emojiButton} 
           onPress={() => handleEmojiPress(emoji.name)}
         >
-          <View style={styles.emojiBox}>
+          <View style={emojiGridStyles.emojiBox}>
             <MaterialCommunityIcons name={emoji.icon} size={40} color={emoji.color} />
-            <Text style={styles.emojiLabel}>{emoji.name}</Text>
+            <Text style={emojiGridStyles.emojiLabel}>{emoji.name}</Text>
           </View>
         </TouchableOpacity>
       ))}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  emojiGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  emojiButton: {
-    alignItems: 'center',
-    marginBottom: 10,
-    width: '45%', // Ajuste a largura para garantir duas colunas
-  },
-  emojiBox: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100, // Defina uma largura fixa
-    height: 100, // Defina uma altura fixa
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  emojiLabel: {
-    fontSize: 12,
-    marginTop: 4,
-  },
-});
 
 export default EmojiGrid;
