@@ -1,8 +1,8 @@
-import React from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; // Importe a biblioteca de ícones
-import bottomBarStyles from '../styles/BottomBarStyles';
 import { router } from 'expo-router';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import bottomBarStyles from '../styles/BottomBarStyles';
 
 const BottomBar = () => {
   const icons: { name: string; icon: 'home-outline' | 'lightbulb-outline' | 'meditation' | 'hand-heart-outline' | 'account-outline'; color: string }[] = [

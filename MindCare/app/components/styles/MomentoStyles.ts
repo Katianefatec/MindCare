@@ -7,12 +7,12 @@ const momentoStyles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 60,
   },
-  emojiButton: {
+  momentoButton: {
     alignItems: 'center',
     marginBottom: 20,
     width: '45%', 
   },
-  emojiBox: {
+  momentoBox: {
     backgroundColor: 'white',
     padding: 15,
     borderRadius: 15,
@@ -26,7 +26,7 @@ const momentoStyles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  emojiLabel: {
+  momentoLabel: {
     fontSize: 14,
     marginTop: 8,
   },

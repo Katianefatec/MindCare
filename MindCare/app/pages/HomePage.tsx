@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
-import BottomBar from '../../components/navigation/BottomBar';
-import EmojiGrid from '../../components/navigation/EmojiGrid';
+import EmojiGrid from '../components/navigation/EmojiGrid';
+import BottomBar from '../components/navigation/BottomBar';
 import homePageStyles from './styles/HomePageStyles';
 
 const HomePage = () => {

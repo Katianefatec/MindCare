@@ -1,34 +1,47 @@
 import { StyleSheet } from 'react-native';
 
 const reflexaoStyles = StyleSheet.create({
+  
   reflexao: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: 60,
   },
-  emojiButton: {
+  reflexaoButton: {
     alignItems: 'center',
     marginBottom: 20,
     width: '45%', 
   },
-  emojiBox: {
+  reflexaoBox: {
     backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 15,
+    padding: 10,
+    borderRadius: 37,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 120, 
-    height: 120, 
+    width: 172, 
+    height: 47,     
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
   },
-  emojiLabel: {
-    fontSize: 14,
-    marginTop: 8,
+  reflexaoLabel: {
+    fontSize: 14,    
+  },
+  vida: {
+    marginLeft: 25,
+  },
+  familia: {
+    marginLeft: 25,
+  },
+  amor: {
+    marginTop:60,
+    marginRight:25,
+  },
+  trabalho: {
+    marginTop:60,
+    marginRight:25,    
   },
 });
 

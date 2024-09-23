@@ -18,7 +18,7 @@ const EmojiGrid = () => {
     { name: 'Raiva', icon: 'emoticon-angry-outline', color: '#DC143C' },
   ];
 
-  const handleEmojiPress = (emojiName) => {
+  const handleEmojiPress = (emojiName: string) => {
     console.log(`Emoji ${emojiName} pressionado!`);
     router.push('/pages/HomePage2'); 
   };
@@ -32,7 +32,7 @@ const EmojiGrid = () => {
           onPress={() => handleEmojiPress(emoji.name)}
         >
           <View style={emojiGridStyles.emojiBox}>
-            <MaterialCommunityIcons name={emoji.icon} size={40} color={emoji.color} />
+            <MaterialCommunityIcons name={emoji.icon as keyof typeof MaterialCommunityIcons.glyphMap} size={40} color={emoji.color} />
             <Text style={emojiGridStyles.emojiLabel}>{emoji.name}</Text>
           </View>
         </TouchableOpacity>
