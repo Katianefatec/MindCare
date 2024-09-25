@@ -16,7 +16,7 @@ const Reflexao = () => {
     console.log(`Opção ${reflexaoName} pressionada!`);     
     switch (reflexaoName) {
       case 'Vida':
-        router.push(`/pages/ReflexaoVida`);
+        router.push(`/pages/reflexoes/ReflexaoVida`);
         break;
       case 'Amor':
         router.push(`/pages/ReflexaoAmor`);

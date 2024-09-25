@@ -16,7 +16,7 @@ const Momento = () => {
     console.log(`Opção ${momentoName} pressionada!`); 
     switch (momentoName) {
       case 'Reflexão':
-        router.push('/pages/ReflexaoPage');
+        router.push('/pages/reflexoes/ReflexaoPage');
         break;
       case 'Calma':
         router.push('/pages/CalmaPage');

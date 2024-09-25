@@ -21,18 +21,18 @@ const BottomBar = () => {
     }
 
     if (iconName === 'CalmaMenu') {
-      router.push('/pages/Calma'); 
+      router.push('/pages/CalmaPage'); 
     }
 
     if (iconName === 'Reflexão') {
-      router.push('/pages/ReflexaoPage'); 
+      router.push(`/pages/reflexoes/ReflexaoPage`); 
     }
 
     if (iconName === 'Avaliacao') {
-      router.push('/pages/Avaliacao');     }
+      router.push('/pages/AvaliacaoPage');     }
 
     if (iconName === 'Apoio') {
-      router.push('/pages/Apoio'); 
+      router.push('/pages/ApoioPage'); 
     }
 
     if (iconName === 'Perfil') {

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { ImageBackground, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import BottomBar from '../components/navigation/BottomBar';
-import Reflexao from '../components/navigation/Reflexao';
-import reflexaoPageStyles from './styles/ReflexaoPageStyles';
-import reflexaoStyles from '../components/styles/ReflexaoStyles';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from 'react';
+import { ImageBackground, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import BottomBar from '../../components/navigation/BottomBar';
+import Reflexao from '../../components/navigation/Reflexao';
+import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
 
 const ReflexaoPage = () => {
   const [search, setSearch] = useState('');
@@ -25,7 +24,7 @@ const ReflexaoPage = () => {
 
   return (
     <ImageBackground 
-      source={require('../../assets/images/fundoReflexao.png')}
+      source={require('../../../assets/images/fundoReflexao.png')}
       style={reflexaoPageStyles.backgroundImage}
     >
       <View style={reflexaoPageStyles.container}>
