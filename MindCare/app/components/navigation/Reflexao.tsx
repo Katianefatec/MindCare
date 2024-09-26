@@ -3,6 +3,12 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import reflexaoStyles from '../styles/ReflexaoStyles';
 import { router } from 'expo-router';
 
+const reflexaoRoutes = {
+  'Vida': '/pages/reflexoes/ReflexaoVida',
+  'Amor': '/pages/reflexoes/ReflexaoAmor',
+  'Família': '/pages/reflexoes/ReflexaoFamilia',
+  'Trabalho': '/pages/reflexoes/ReflexaoTrabalho',
+};
 
 const Reflexao = () => {
   const reflexoes = [
@@ -12,22 +18,9 @@ const Reflexao = () => {
     { name: 'Trabalho', style: reflexaoStyles.trabalho },        
   ];
 
-  const handleReflexaoPress = (reflexaoName: string) => {
-    console.log(`Opção ${reflexaoName} pressionada!`);     
-    switch (reflexaoName) {
-      case 'Vida':
-        router.push(`/pages/reflexoes/ReflexaoVida`);
-        break;
-      case 'Amor':
-        router.push(`/pages/ReflexaoAmor`);
-        break;
-      case 'Família':
-        router.push(`/pages/ReflexaoFamilia`);
-        break;
-      case 'Trabalho':
-        router.push(`/pages/ReflexaoTrabalho`);
-        break;
-    }    
+  const handleReflexaoPress = (reflexaoName: keyof typeof reflexaoRoutes) => {
+      console.log(`Opção ${reflexaoName} pressionada!`);     
+      router.push(reflexaoRoutes[reflexaoName] as any);
   };
 
   return (
@@ -36,7 +29,7 @@ const Reflexao = () => {
         <TouchableOpacity 
           key={reflexao.name} 
           style={reflexaoStyles.reflexaoButton} 
-          onPress={() => handleReflexaoPress(reflexao.name)}
+          onPress={() => handleReflexaoPress(reflexao.name as keyof typeof reflexaoRoutes)}
         >
           <View style={[reflexaoStyles.reflexaoBox, reflexao.style]}>            
             <Text style={reflexaoStyles.reflexaoLabel}>{reflexao.name}</Text>

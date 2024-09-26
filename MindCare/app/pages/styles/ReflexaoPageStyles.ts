@@ -76,6 +76,26 @@ const reflexaoPageStyles = StyleSheet.create({
     height: 200,
     textAlignVertical: 'top',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  scrollView: {
+    width: '100%',
+  },
+
+  dateText: {
+    fontSize: 14,
+    color: '#4A4A4A',
+  },
+  reflexaoText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#4A4A4A',
+  }
 });
 
 export default reflexaoPageStyles;
