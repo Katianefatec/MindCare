@@ -16,7 +16,7 @@ const BottomBar = () => {
   const handleIconPress = (iconName: string) => {
     console.log(`Ícone ${iconName} pressionado!`);
 
-    if (iconName==='Home') {
+    if (iconName === 'Home') {
       router.push('/pages/HomePage'); 
     }
 
@@ -25,18 +25,20 @@ const BottomBar = () => {
     }
 
     if (iconName === 'Reflexão') {
-      router.push(`/pages/reflexoes/ReflexaoPage`); 
+      router.push('/pages/reflexoes/ReflexaoPage'); 
     }
 
     if (iconName === 'Avaliacao') {
-      router.push('/pages/AvaliacaoPage');     }
+      router.push('/pages/AvaliacaoPage'); 
+    }
 
     if (iconName === 'Apoio') {
       router.push('/pages/ApoioPage'); 
     }
 
-    if (iconName === 'Perfil') {
-      router.push('/pages/Perfil');     }
+    // if (iconName === 'Perfil') {
+    //   router.push('/pages/Perfil'); 
+    // }
   };
 
   return (
@@ -47,7 +49,6 @@ const BottomBar = () => {
           onPress={() => handleIconPress(icon.name)}
         >
           <MaterialCommunityIcons name={icon.icon} size={35} color={icon.color} />
-          
         </TouchableOpacity>
       ))}
     </View>

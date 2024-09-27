@@ -1,8 +1,22 @@
 import React from 'react';
-import ReflexaoBase from './ReflexaoBase';
+import { Text, View } from 'react-native';
+import { useReflexao } from '../../context/ReflexaoContext';
+
+interface Reflexao {
+  text: string;
+}
 
 const ReflexaoVida = () => {
-  return <ReflexaoBase title="Vida" />;
+  const { reflexoes }: { reflexoes: Reflexao[] } = useReflexao();
+
+  return (
+    <View>
+      <Text>Vida</Text>
+      {reflexoes.map((reflexao: Reflexao, index: number) => (
+        <Text key={index}>{reflexao.text}</Text>
+      ))}
+    </View>
+  );
 };
 
 export default ReflexaoVida;
