@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 const Momento = () => {
   const momentos = [
     { name: 'Reflexão', icon: 'lightbulb-outline', color: '#FFD700' },
-    { name: 'Calma', icon: 'meditation', color: '#00BFFF' },
+    { name: 'Calma', icon: 'spa', color: '#ADD8E6' },
     { name: 'Avaliação', icon: 'clipboard-check-outline', color: '#FF69B4' },
     { name: 'Apoio', icon: 'hand-heart-outline', color: '#A9A9A9' },        
   ];

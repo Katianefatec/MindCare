@@ -5,10 +5,10 @@ import { TouchableOpacity, View } from 'react-native';
 import bottomBarStyles from '../styles/BottomBarStyles';
 
 const BottomBar = () => {
-  const icons: { name: string; icon: 'home-outline' | 'lightbulb-outline' | 'meditation' | 'hand-heart-outline' | 'account-outline'; color: string }[] = [
+  const icons: { name: string; icon: 'home-outline' | 'lightbulb-outline' | 'meditation' | 'hand-heart-outline' | 'account-outline' | 'spa'; color: string }[] = [
     { name: 'Home', icon: 'home-outline', color: '#194146' },
     { name: 'Reflexão', icon: 'lightbulb-outline', color: '#194146' },
-    { name: 'CalmaMenu', icon: 'meditation', color: '#194146' },
+    { name: 'CalmaMenu', icon: 'spa', color: '#194146' },
     { name: 'Apoio', icon: 'hand-heart-outline', color: '#194146' },
     { name: 'Perfil', icon: 'account-outline', color: '#194146' },
   ];
@@ -17,7 +17,7 @@ const BottomBar = () => {
     console.log(`Ícone ${iconName} pressionado!`);
 
     if (iconName==='Home') {
-      router.push('/pages/HomePage'); 
+      router.push('/pages/HomePage2'); 
     }
 
     if (iconName === 'CalmaMenu') {
