@@ -1,10 +1,11 @@
-import Momento from '../components/navigation/Momento';
 import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import BottomBar from '../components/navigation/BottomBar';
 import homePage2Styles from './styles/HomePage2Styles';
+import Calma from '../components/navigation/calma';
 
-const Calma = () => {
+
+const CalmaPage = () => {
   return (
     <ImageBackground 
       source={require('../../assets/images/fundoHome.png')}
@@ -12,11 +13,11 @@ const Calma = () => {
     >
       <View style={homePage2Styles.container}>
         <Text style={homePage2Styles.greeting}>Como você se acalma?</Text>
-        <Momento/>
+        <Calma />
         <BottomBar /> 
       </View>
     </ImageBackground>
   );
 }
 
-export default Calma;
+export default CalmaPage;

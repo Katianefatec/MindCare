@@ -98,7 +98,7 @@ const reflexaoPageStyles = StyleSheet.create({
   },
 
   cardView: {
-    width: 360,
+    width: 350,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 10,
@@ -110,7 +110,14 @@ const reflexaoPageStyles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
     position: 'relative',
-  }
+  },
+
+  deleteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 10,
+  },
 
 });
 
