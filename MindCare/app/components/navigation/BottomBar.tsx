@@ -21,7 +21,7 @@ const BottomBar = () => {
     }
 
     if (iconName === 'CalmaMenu') {
-      router.push('/pages/CalmaPage'); 
+      router.push(`/pages/calma/CalmaPage`); 
     }
 
     if (iconName === 'Reflexão') {
@@ -35,8 +35,8 @@ const BottomBar = () => {
       router.push('/pages/ApoioPage'); 
     }
 
-    if (iconName === 'Perfil') {
-      router.push('/pages/Perfil');     }
+    // if (iconName === 'Perfil') {
+    //   router.push('/pages/Perfil');     }
   };
 
   return (

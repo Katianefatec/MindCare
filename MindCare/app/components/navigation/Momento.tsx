@@ -19,7 +19,7 @@ const Momento = () => {
         router.push('/pages/reflexoes/ReflexaoPage');
         break;
       case 'Calma':
-        router.push('/pages/CalmaPage');
+        router.push('/pages/calma/CalmaPage');
         break;
       case 'Avaliação':
         router.push('/pages/AvaliacaoPage');

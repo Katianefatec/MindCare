@@ -6,25 +6,25 @@ import { router } from 'expo-router';
 
 const Calma = () => {
   const momentos = [
-    { name: 'Reflexão', icon: 'lightbulb-outline', color: '#FFD700' },
-    { name: 'Calma', icon: 'meditation', color: '#00BFFF' },
-    { name: 'Avaliação', icon: 'clipboard-check-outline', color: '#FF69B4' },
-    { name: 'Apoio', icon: 'hand-heart-outline', color: '#A9A9A9' },        
+    { name: 'Aprender', icon: 'lightbulb-outline', color: '#FFD700' },
+    { name: 'Ouvir', icon: 'meditation', color: '#00BFFF' },
+    { name: 'Meditar', icon: 'clipboard-check-outline', color: '#FF69B4' },
+    { name: 'Respirar', icon: 'hand-heart-outline', color: '#A9A9A9' },        
   ];
 
   const handleMomentoPress = (momentoName: string) => {
     console.log(`Opção ${momentoName} pressionada!`); 
     switch (momentoName) {
-      case 'Reflexão':
+      case 'Aprender':
         router.push('/pages/reflexoes/ReflexaoPage');
         break;
-      case 'Calma':
-        router.push('/pages/CalmaPage');
+      case 'Ouvir':
+        router.push('/pages/calma/CalmaPage');
         break;
-      case 'Avaliação':
+      case 'Meditar':
         router.push('/pages/AvaliacaoPage');
         break;
-      case 'Apoio':
+      case 'Respirar':
         router.push('/pages/ApoioPage');
         break;
     }    
