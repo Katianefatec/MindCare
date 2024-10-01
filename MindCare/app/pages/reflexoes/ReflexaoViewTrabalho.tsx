@@ -1,9 +1,8 @@
-// MindCare/app/pages/reflexoes/ReflexaoViewTrabalho.tsx
 import React from 'react';
-import { ReflexaoViewBase } from './ReflexaoViews';
+import ReflexaoViewBase from './ReflexaoViewBase';
 
-const ReflexaoViewTrabalho: React.FC = () => {
-  return <ReflexaoViewBase categoria="Trabalho" />;
+const ReflexaoViewTrabalho = () => {
+  return <ReflexaoViewBase title="Trabalho" />;
 };
 
 export default ReflexaoViewTrabalho;

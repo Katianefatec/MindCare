@@ -1,9 +1,8 @@
-// MindCare/app/pages/reflexoes/ReflexaoViewFamilia.tsx
 import React from 'react';
-import { ReflexaoViewBase } from './ReflexaoViews';
+import ReflexaoViewBase from './ReflexaoViewBase';
 
-const ReflexaoViewFamilia: React.FC = () => {
-  return <ReflexaoViewBase categoria="Familia" />;
+const ReflexaoViewFamilia = () => {
+  return <ReflexaoViewBase title="Família" />;
 };
 
 export default ReflexaoViewFamilia;

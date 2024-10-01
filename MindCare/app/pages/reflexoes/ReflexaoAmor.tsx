@@ -1,18 +1,8 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { useReflexao } from '../../context/ReflexaoContext';
+import ReflexaoBase from './ReflexaoBase';
 
-const ReflexaoAmor = () => {
-  const { reflexoes } = useReflexao();
-
-  return (
-    <View>
-      <Text>Reflexão Amor</Text>
-      {reflexoes.map((reflexao, index) => (
-        <Text key={index}>{reflexao.text}</Text>
-      ))}
-    </View>
-  );
+const ReflexaoVida = () => {
+  return <ReflexaoBase title="Amor" />;
 };
 
-export default ReflexaoAmor;
+export default ReflexaoVida;

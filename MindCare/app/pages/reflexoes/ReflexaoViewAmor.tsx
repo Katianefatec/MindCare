@@ -1,9 +1,8 @@
-// MindCare/app/pages/reflexoes/ReflexaoViewAmor.tsx
 import React from 'react';
-import { ReflexaoViewBase } from './ReflexaoViews';
+import ReflexaoViewBase from './ReflexaoViewBase';
 
-const ReflexaoViewAmor: React.FC = () => {
-  return <ReflexaoViewBase categoria="Amor" />;
+const ReflexaoViewAmor = () => {
+  return <ReflexaoViewBase title="Amor" />;
 };
 
 export default ReflexaoViewAmor;

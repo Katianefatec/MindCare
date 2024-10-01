@@ -1,9 +1,10 @@
-// MindCare/app/pages/reflexoes/ReflexaoViewVida.tsx
 import React from 'react';
-import { ReflexaoViewBase } from './ReflexaoViews';
+import ReflexaoViewBase from './ReflexaoViewBase';
 
-const ReflexaoViewVida: React.FC = () => {
-  return <ReflexaoViewBase categoria="Vida" />;
+const ReflexaoViewVida = () => {
+  const title = "Vida"; // Definindo a variável title
+  console.log("Opção Vida pressionada! Title?", title); // Adicionando log para depuração
+  return <ReflexaoViewBase title={title} />;
 };
 
 export default ReflexaoViewVida;

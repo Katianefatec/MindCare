@@ -8,6 +8,7 @@ const reflexaoRoutes = {
   'Amor': '/pages/reflexoes/ReflexaoAmor',
   'Família': '/pages/reflexoes/ReflexaoFamilia',
   'Trabalho': '/pages/reflexoes/ReflexaoTrabalho',
+  
 };
 
 const Reflexao = () => {

@@ -1,22 +1,89 @@
-// MindCare/app/pages/reflexoes/ReflexaoViewBase.tsx
-import React from 'react';
-import { View, Text } from 'react-native';
-import { useReflexao } from '../../context/ReflexaoContext';
+import React, { useEffect, useState } from 'react';
+import { ImageBackground, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { router } from 'expo-router';
+import BottomBar from '../../components/navigation/BottomBar';
+import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
+import { FontAwesome } from '@expo/vector-icons';
+import { db } from '../../config/firebaseConfig';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
-interface ReflexaoViewBaseProps {
-  categoria: string;
+interface Reflexao {
+  date: string;
+  text: string;
 }
 
-const ReflexaoViewBase: React.FC<ReflexaoViewBaseProps> = ({ categoria }) => {
-  const { reflexoes }: { reflexoes: { text: string }[] } = useReflexao();
+interface RouteParams {
+  title: string;
+}
+
+const ReflexaoViewBase: React.FC = () => {
+  const route = useRoute();
+  const { title } = route.params as RouteParams;
+  const [reflexoes, setReflexoes] = useState<Reflexao[]>([]);
+
+  useEffect(() => {
+    console.log("Title recebido no ReflexaoViewBase:", title); // Adicionando log para depuração
+
+    if (!title) {
+      console.error("Title is undefined");
+      return;
+    }
+
+    const fetchReflexoes = async () => {
+      try {
+        const q = query(collection(db, 'reflexoes'), where('category', '==', title));
+        const querySnapshot = await getDocs(q);
+        const fetchedReflexoes: Reflexao[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedReflexoes.push(doc.data() as Reflexao);
+        });
+        setReflexoes(fetchedReflexoes);
+      } catch (error) {
+        console.error("Erro ao buscar reflexões: ", error);
+      }
+    };
+
+    fetchReflexoes();
+  }, [title]);
+
+  const handleAdd = () => {
+    router.push('/pages/reflexoes/ReflexaoBase');
+  };
+
+  const handleBack = () => {
+    router.push('/pages/reflexoes/ReflexaoPage');
+  };
 
   return (
-    <View>
-      <Text>{categoria}</Text>
-      {reflexoes.map((reflexao, index) => (
-        <Text key={index}>{reflexao.text}</Text>
-      ))}
-    </View>
+    <ImageBackground 
+      source={require('../../../assets/images/fundoReflexao.png')}
+      style={reflexaoPageStyles.backgroundImage}
+    >
+      <View style={reflexaoPageStyles.container}>
+        
+        <View style={reflexaoPageStyles.header}>
+          <TouchableOpacity onPress={handleBack} style={reflexaoPageStyles.iconLeft}>
+            <FontAwesome name="arrow-left" size={24} color="gray" />
+          </TouchableOpacity>
+          <Text style={reflexaoPageStyles.greeting}>{title}</Text>
+          <TouchableOpacity onPress={handleAdd} style={reflexaoPageStyles.iconRight}>
+            <FontAwesome name="plus" size={24} color="gray" />
+          </TouchableOpacity>
+        </View>
+        
+        <ScrollView style={reflexaoPageStyles.scrollView}>
+          {reflexoes.map((reflexao, index) => (
+            <View key={index} style={reflexaoPageStyles.card}>
+              <Text style={reflexaoPageStyles.dateText}>{reflexao.date}</Text>
+              <Text style={reflexaoPageStyles.reflexaoText}>{reflexao.text}</Text>
+            </View>
+          ))}
+        </ScrollView>
+        
+        <BottomBar /> 
+      </View>
+    </ImageBackground>
   );
 };
 
