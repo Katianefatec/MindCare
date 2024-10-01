@@ -95,7 +95,25 @@ const reflexaoPageStyles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18,
     color: '#4A4A4A',
+  },
+
+  cardView: {
+    width: 360,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom:7,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+    position: 'relative',
   }
+
 });
+
+
 
 export default reflexaoPageStyles;

@@ -22,8 +22,7 @@ const ReflexaoViewBase: React.FC = () => {
   const { title } = route.params as RouteParams;
   const [reflexoes, setReflexoes] = useState<Reflexao[]>([]);
 
-  useEffect(() => {
-    console.log("Title recebido no ReflexaoViewBase:", title); // Adicionando log para depuração
+  useEffect(() => {    
 
     if (!title) {
       console.error("Title is undefined");
@@ -62,19 +61,11 @@ const ReflexaoViewBase: React.FC = () => {
     >
       <View style={reflexaoPageStyles.container}>
         
-        <View style={reflexaoPageStyles.header}>
-          <TouchableOpacity onPress={handleBack} style={reflexaoPageStyles.iconLeft}>
-            <FontAwesome name="arrow-left" size={24} color="gray" />
-          </TouchableOpacity>
-          <Text style={reflexaoPageStyles.greeting}>{title}</Text>
-          <TouchableOpacity onPress={handleAdd} style={reflexaoPageStyles.iconRight}>
-            <FontAwesome name="plus" size={24} color="gray" />
-          </TouchableOpacity>
-        </View>
+      <Text style={reflexaoPageStyles.greeting}>{title}</Text>
         
         <ScrollView style={reflexaoPageStyles.scrollView}>
           {reflexoes.map((reflexao, index) => (
-            <View key={index} style={reflexaoPageStyles.card}>
+            <View key={index} style={reflexaoPageStyles.cardView}>
               <Text style={reflexaoPageStyles.dateText}>{reflexao.date}</Text>
               <Text style={reflexaoPageStyles.reflexaoText}>{reflexao.text}</Text>
             </View>
