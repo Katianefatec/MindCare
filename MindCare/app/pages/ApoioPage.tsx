@@ -6,17 +6,13 @@ import homePage2Styles from './styles/HomePage2Styles';
 
 const Apoio = () => {
   return (
-    <ImageBackground 
-      source={require('../../assets/images/fundoHome.png')}
-      style={homePage2Styles.backgroundImage}
-    >
-      <View style={homePage2Styles.container}>
+    
+    <View style={[homePage2Styles.container, { backgroundColor: '#41ACBB' }]}>
         <Text style={homePage2Styles.greeting}>Pesquise o profissional</Text>
         <Momento/>
         <BottomBar /> 
       </View>
-    </ImageBackground>
-  );
+    );
 }
 
 export default Apoio;

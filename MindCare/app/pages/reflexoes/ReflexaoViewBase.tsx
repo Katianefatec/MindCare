@@ -45,15 +45,7 @@ const ReflexaoViewBase: React.FC = () => {
 
     fetchReflexoes();
   }, [title]);
-
-  const handleAdd = () => {
-    router.push('/pages/reflexoes/ReflexaoBase');
-  };
-
-  const handleBack = () => {
-    router.push('/pages/reflexoes/ReflexaoPage');
-  };
-
+  
   const handleDelete = (id: string) => {
     Alert.alert(
       "Confirmar Exclusão",

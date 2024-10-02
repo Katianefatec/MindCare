@@ -9,7 +9,7 @@ const Calma = () => {
     { name: 'Aprender', icon: 'book-outline', color: '#FFD700' },
     { name: 'Ouvir', icon: 'headphones', color: '#00BFFF' },
     { name: 'Meditar', icon: 'meditation', color: '#FF69B4' },
-    { name: 'Respirar', icon: 'lungs', color: '#A9A9A9' },        
+    { name: 'Respirar', icon: 'lungs', color: '#D8BFD8' },      
   ];
 
   const handleMomentoPress = (momentoName: string) => {
