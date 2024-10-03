@@ -43,7 +43,7 @@ const ReflexaoBase = ({ title }: ReflexaoBaseProps) => {
       source={require('../../../assets/images/fundoReflexao.png')}
       style={reflexaoPageStyles.backgroundImage}
     >
-      <View style={reflexaoPageStyles.container2}>
+      <View style={reflexaoPageStyles.container3}>
         
         <Text style={reflexaoPageStyles.greeting}>{title}</Text>
         

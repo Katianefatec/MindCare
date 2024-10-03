@@ -22,7 +22,15 @@ const reflexaoPageStyles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
     paddingBottom: 10,
-    
+  },
+
+  container3: {    
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 70,
+    marginTop: 20,
+    alignItems: 'center',
+    paddingBottom: 20,    
   },
 
   greeting: {
