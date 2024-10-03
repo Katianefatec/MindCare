@@ -98,7 +98,7 @@ const reflexaoPageStyles = StyleSheet.create({
   },
 
   cardView: {
-    width: 350,
+    width: 310,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 10,
@@ -114,9 +114,39 @@ const reflexaoPageStyles = StyleSheet.create({
 
   deleteButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: 0,
+    right: 15,
     padding: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 
 });

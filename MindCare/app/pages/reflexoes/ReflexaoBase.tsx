@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
 import { FontAwesome } from '@expo/vector-icons';
-import { db } from '../../config/firebaseConfig';
+import { db, auth } from '../../config/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 
 interface ReflexaoBaseProps {
@@ -15,10 +15,16 @@ const ReflexaoBase = ({ title }: ReflexaoBaseProps) => {
   const [text, setText] = useState('');
 
   const handleSave = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Usuário não autenticado");
+      return;
+    }
     try {
       await addDoc(collection(db, 'reflexoes'), {
         category: title,
         text: text,
+        userId: user.uid,
         date: new Date().toLocaleString(),
       });
       console.log(`Texto salvo: ${text}`);

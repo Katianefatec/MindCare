@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, ScrollView, Image, Text, TextInput, Pressable, Alert } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import loginStyles from './styles/LoginStyles';
 import { auth } from '../config/firebaseConfig';
-import { router } from "expo-router";
+import { useRouter } from 'expo-router';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)

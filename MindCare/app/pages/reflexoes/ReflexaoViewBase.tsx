@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, Button, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { router } from 'expo-router';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
 import { FontAwesome } from '@expo/vector-icons';
-import { db } from '../../config/firebaseConfig';
+import { db, auth } from '../../config/firebaseConfig';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 interface Reflexao {
@@ -22,16 +21,28 @@ const ReflexaoViewBase: React.FC = () => {
   const route = useRoute();
   const { title } = route.params as RouteParams;
   const [reflexoes, setReflexoes] = useState<Reflexao[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (!title) {
       console.error("Title is undefined");
       return;
     }
 
     const fetchReflexoes = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.error("Usuário não autenticado");
+        return;
+      }
+
       try {
-        const q = query(collection(db, 'reflexoes'), where('category', '==', title));
+        const q = query(
+          collection(db, 'reflexoes'),
+          where('category', '==', title),
+          where('userId', '==', user.uid)
+        );
         const querySnapshot = await getDocs(q);
         const fetchedReflexoes: Reflexao[] = [];
         querySnapshot.forEach((doc) => {
@@ -45,30 +56,32 @@ const ReflexaoViewBase: React.FC = () => {
 
     fetchReflexoes();
   }, [title]);
-  
-  const handleDelete = (id: string) => {
-    Alert.alert(
-      "Confirmar Exclusão",
-      "Você tem certeza que deseja excluir esta reflexão?",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel"
-        },
-        {
-          text: "Excluir",
-          onPress: async () => {
-            try {
-              await deleteDoc(doc(db, 'reflexoes', id));
-              setReflexoes(reflexoes.filter(reflexao => reflexao.id !== id));
-            } catch (error) {
-              console.error("Erro ao excluir reflexão: ", error);
-            }
-          },
-          style: "destructive"
-        }
-      ]
-    );
+
+  const handleDelete = async () => {
+    if (!selectedId) return;
+
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Erro: Usuário não autenticado.");
+      setModalVisible(false);
+      return;
+    }
+
+    try {
+      console.log(`Tentando excluir documento com ID: ${selectedId}`);
+      await deleteDoc(doc(db, 'reflexoes', selectedId));
+      console.log(`Documento com ID: ${selectedId} excluído com sucesso.`);
+      setReflexoes(reflexoes.filter(reflexao => reflexao.id !== selectedId));
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Erro ao excluir reflexão: ", error);
+      setModalVisible(false);
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    setSelectedId(id);
+    setModalVisible(true);
   };
 
   return (
@@ -85,7 +98,7 @@ const ReflexaoViewBase: React.FC = () => {
             <View key={index} style={reflexaoPageStyles.cardView}>
               <Text style={reflexaoPageStyles.dateText}>{reflexao.date}</Text>
               <Text style={reflexaoPageStyles.reflexaoText}>{reflexao.text}</Text>
-              <TouchableOpacity onPress={() => handleDelete(reflexao.id)} style={reflexaoPageStyles.deleteButton}>
+              <TouchableOpacity onPress={() => confirmDelete(reflexao.id)} style={reflexaoPageStyles.deleteButton}>
                 <FontAwesome name="times" size={24} color="red" />
               </TouchableOpacity>
             </View>
@@ -93,9 +106,30 @@ const ReflexaoViewBase: React.FC = () => {
         </ScrollView>
         
         <BottomBar /> 
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={reflexaoPageStyles.centeredView}>
+            <View style={reflexaoPageStyles.modalView}>
+              <Text style={reflexaoPageStyles.modalText}>Você tem certeza que deseja excluir esta reflexão?</Text>
+              <View style={reflexaoPageStyles.buttonContainer}>
+                <Button title="Cancelar" onPress={() => setModalVisible(false)} />
+                <Button title="Excluir" onPress={handleDelete} color="red" />
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     </ImageBackground>
   );
 };
+
+
 
 export default ReflexaoViewBase;
