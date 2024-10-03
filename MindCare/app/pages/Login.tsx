@@ -62,8 +62,7 @@ const Login = () => {
           {errorMessage ? <Text style={loginStyles.errorMessage}>{errorMessage}</Text> : null}
           <Pressable onPress={handleLogin} style={loginStyles.loginButton}>
             <Text style={loginStyles.loginButtonText}>ENTRAR</Text>
-          </Pressable>
-          <Text onPress={handleAlteraSenha} style={loginStyles.linkText}>Esqueceu sua senha? Clique aqui</Text>
+          </Pressable>          
           <Text onPress={navigateToRegister} style={loginStyles.linkText}>Não possui conta? Clique aqui</Text>
         </View>
       </ScrollView>

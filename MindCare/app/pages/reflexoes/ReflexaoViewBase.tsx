@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, StyleSheet } from 'react-native';
+import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, StyleSheet, TextInput } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { db, auth } from '../../config/firebaseConfig';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
@@ -23,6 +23,19 @@ const ReflexaoViewBase: React.FC = () => {
   const [reflexoes, setReflexoes] = useState<Reflexao[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+
+  const showDatepicker = () => {
+    setShow(true);
+  };
+
+  const onChange = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
 
   useEffect(() => {
     if (!title) {
@@ -89,9 +102,30 @@ const ReflexaoViewBase: React.FC = () => {
       source={require('../../../assets/images/fundoReflexao.png')}
       style={reflexaoPageStyles.backgroundImage}
     >
-      <View style={reflexaoPageStyles.container}>
+      <View style={reflexaoPageStyles.searchContainer}>
+          <TextInput
+            style={reflexaoPageStyles.searchInput}
+            placeholder="Buscar inspiração"
+            value={search}
+            onChangeText={setSearch}
+          />
+          <TouchableOpacity onPress={showDatepicker}>
+            <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
+          </TouchableOpacity>
+        </View>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            display="default"
+            onChange={onChange}
+          />
+        )}
         
-        <Text style={reflexaoPageStyles.greeting}>{title}</Text>
+      <View style={reflexaoPageStyles.container2}>
+        
+        <Text style={reflexaoPageStyles.greeting2}>Reflexões sobre {title}</Text>
         
         <ScrollView style={reflexaoPageStyles.scrollView}>
           {reflexoes.map((reflexao, index) => (

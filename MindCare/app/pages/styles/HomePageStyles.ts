@@ -1,10 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const homePageStyles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover', 
-    justifyContent: 'center',
+  backgroundImage: {    
+      width: width,
+      height: height,
+      resizeMode: 'cover',
+      position: 'absolute',
   },
   container: {
     flex: 1,

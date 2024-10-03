@@ -1,35 +1,76 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const reflexaoPageStyles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover', 
-    justifyContent: 'center',
+  backgroundImage: {    
+    width: width,
+    height: height,
+    resizeMode: 'cover',
+    position: 'absolute',
   },
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingHorizontal: 20, 
-    paddingVertical: 60,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    paddingBottom: 20,
   },
+
+  container2: {
+    flex: 1,    
+    paddingVertical: 10,
+    alignItems: 'center',
+    paddingBottom: 10,
+    
+  },
+
   greeting: {
     fontSize: 30, 
-    fontWeight: '800',    
+    fontWeight: '700',    
     color: 'white', 
     marginLeft: 10,  
-    marginBottom:45,
+    marginBottom: 55,
     textAlign: 'center',      
-  },  
+  }, 
+  
+  greeting2: {
+    fontSize: 25, 
+    fontWeight: '700',    
+    color: 'white', 
+    marginLeft: 10,  
+    marginBottom: 55,
+    textAlign: 'center',      
+  }, 
   
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#d9d9d980',
     borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 30,
+    paddingHorizontal: 25,
+    alignContent: 'center',
+    textAlign: 'center',
+    alignSelf: 'center',
+    marginTop:40,
+    marginBottom: 60,
+    width: '70%',
   },
+
+  searchContainer2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#d9d9d980',
+    borderRadius: 10,
+    paddingHorizontal: 25,
+    alignContent: 'center',
+    textAlign: 'center',
+    alignSelf: 'center',
+    marginTop:40,
+    marginBottom: 0,
+    width: '70%',
+  },
+
   searchInput: {
     flex: 1,
     height: 40,
@@ -86,7 +127,6 @@ const reflexaoPageStyles = StyleSheet.create({
   scrollView: {
     width: '100%',
   },
-
   dateText: {
     fontSize: 14,
     color: '#4A4A4A',
@@ -96,13 +136,12 @@ const reflexaoPageStyles = StyleSheet.create({
     fontSize: 18,
     color: '#4A4A4A',
   },
-
   cardView: {
     width: 310,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 10,
-    marginBottom:7,
+    marginBottom: 7,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -110,8 +149,8 @@ const reflexaoPageStyles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
     position: 'relative',
+    marginLeft:25,
   },
-
   deleteButton: {
     position: 'absolute',
     top: 0,
@@ -148,25 +187,20 @@ const reflexaoPageStyles = StyleSheet.create({
     padding: 5,
     borderRadius: 3,
     backgroundColor: '#a5a4a4',
-    
   },
   modalButtonDelete: {
-    backgroundColor: 'rrgb(24rgb(224, 31, 31)5, 78, 78)ed',
+    backgroundColor: 'rgb(224, 31, 31)',
   },
   modalButtonText: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  
   modalText: {
     fontSize: 15,
     marginBottom: 10,
     textAlign: "center",
   },
-
 });
-
-
 
 export default reflexaoPageStyles;

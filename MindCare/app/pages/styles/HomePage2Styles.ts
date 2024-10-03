@@ -1,17 +1,22 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const homePage2Styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover', 
-    justifyContent: 'center',
+    width: width,
+    height: height,
+    resizeMode: 'cover',
+    position: 'absolute',
+    
   },
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingHorizontal: 20, 
-    paddingVertical: 80,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 70,
   },
   greeting: {
     fontSize: 30, 

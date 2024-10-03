@@ -3,18 +3,17 @@ import { StyleSheet } from "react-native";
 const loginStyles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#41ACBB",
   },
   scrollView: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    
   },
   container: {
-    backgroundColor: "#41ACBB",
-    borderColor: "#DBECEF",
-    borderWidth: 1,
+    
     paddingTop: 132,
     paddingBottom: 74,
+    alignContent: "center",    
   },
   mainImage: {
     height: 188,
@@ -51,7 +50,7 @@ const loginStyles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#19484F",
     paddingVertical: 13,
-    marginBottom: 24,
+    marginBottom: 10,
     marginHorizontal: 97,
     shadowColor: "#00000040",
     shadowOpacity: 0.3,
@@ -66,7 +65,8 @@ const loginStyles = StyleSheet.create({
   linkText: {
     fontSize: 12,
     marginBottom: 14,
-    marginLeft: 73,
+    alignItems: "center",
+    textAlign: "center",   
   },
 });
 

@@ -11,9 +11,10 @@ const ReflexaoPage = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
+
   const onChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    setShow(Platform.OS === 'android');
     setDate(currentDate);
     console.log(`Data selecionada: ${currentDate}`);
   };
@@ -27,8 +28,7 @@ const ReflexaoPage = () => {
       source={require('../../../assets/images/fundoReflexao.png')}
       style={reflexaoPageStyles.backgroundImage}
     >
-      <View style={reflexaoPageStyles.container}>
-        <View style={reflexaoPageStyles.searchContainer}>
+      <View style={reflexaoPageStyles.searchContainer}>
           <TextInput
             style={reflexaoPageStyles.searchInput}
             placeholder="Buscar inspiração"
@@ -48,6 +48,9 @@ const ReflexaoPage = () => {
             onChange={onChange}
           />
         )}
+        
+      <View style={reflexaoPageStyles.container}>
+        
         <Text style={reflexaoPageStyles.greeting}>O que te inspira?</Text>
         <Reflexao/>
         <BottomBar /> 

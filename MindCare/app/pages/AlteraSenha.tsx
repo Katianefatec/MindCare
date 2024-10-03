@@ -10,7 +10,10 @@ const AlteraSenha = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handlePasswordReset = () => {
-    sendPasswordResetEmail(auth, email)
+    sendPasswordResetEmail(auth, email, {
+      url: 'http://localhost:8081/Login', 
+      handleCodeInApp: true, 
+    })
       .then(() => {
         Alert.alert("Sucesso", "Email de recuperação enviado!");
       })
