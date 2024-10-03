@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, Button, StyleSheet } from 'react-native';
+import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
@@ -117,10 +117,14 @@ const ReflexaoViewBase: React.FC = () => {
         >
           <View style={reflexaoPageStyles.centeredView}>
             <View style={reflexaoPageStyles.modalView}>
-              <Text style={reflexaoPageStyles.modalText}>Você tem certeza que deseja excluir esta reflexão?</Text>
+              <Text style={reflexaoPageStyles.modalText}>Excluir reflexão?</Text>
               <View style={reflexaoPageStyles.buttonContainer}>
-                <Button title="Cancelar" onPress={() => setModalVisible(false)} />
-                <Button title="Excluir" onPress={handleDelete} color="red" />
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={reflexaoPageStyles.modalButton}>
+                  <Text style={reflexaoPageStyles.modalButtonText}>Não</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleDelete} style={[reflexaoPageStyles.modalButton, reflexaoPageStyles.modalButtonDelete]}>
+                  <Text style={reflexaoPageStyles.modalButtonText}>Sim</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

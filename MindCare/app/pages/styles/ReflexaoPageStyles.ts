@@ -115,7 +115,7 @@ const reflexaoPageStyles = StyleSheet.create({
   deleteButton: {
     position: 'absolute',
     top: 0,
-    right: 15,
+    right: 10,
     padding: 10,
   },
   centeredView: {
@@ -125,27 +125,43 @@ const reflexaoPageStyles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
+    margin: 5,
+    backgroundColor: "#e9f5f7",
+    borderRadius: 5,
+    padding: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 1,
+      height: 1,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
   },
+  modalButton: {
+    padding: 5,
+    borderRadius: 3,
+    backgroundColor: '#a5a4a4',
+    
+  },
+  modalButtonDelete: {
+    backgroundColor: 'rrgb(24rgb(224, 31, 31)5, 78, 78)ed',
+  },
+  modalButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  
   modalText: {
-    marginBottom: 15,
+    fontSize: 15,
+    marginBottom: 10,
     textAlign: "center",
   },
 
