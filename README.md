@@ -9,7 +9,9 @@
 - [Tecnologias utilizadas](#Tecnologias-utilizadas)
 - [Backlog do produto](#Backlog-do-produto)
 - [Relatório de entregas](#Relatório-de-entregas)
+- [Protótipo navegável](#Protótipo-navegável)
 - [Modelo de Dados](#Modelo-de-Dados)
+- [Como executar o projeto](#Como-executar-o-projeto)
 
 ## Sobre o projeto
 
@@ -54,7 +56,7 @@ Aqui estão as seguintes tecnologias que utilizamos:
 | Sprint | Período | Status | Relatório |
 |:-----:|:----------:|:---------:|:---------:|
 | 1 | 02/09/2024 - 09/09/2024 | Concluído | [Ver relatório](#Kick-off)|
-| 2 | 09/09/2024 - 29/09/2024 | Em andamento | [Ver relatório](#Sprint-1)|  
+| 2 | 09/09/2024 - 29/09/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
 | 3 | 04/10/2024 - 25/10/2024 | Planejado | [Ver relatório](#Sprint-2)| 
 | 4 | 26/10/2024 - 15/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
 | 5 | 15/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
@@ -67,4 +69,21 @@ Aqui estão as seguintes tecnologias que utilizamos:
 
 <img src="/doc/assets/modeloLogico.jpg" alt="Modelo Lógico do Banco de Dados">
 
-[➳ Retornar ao início](#Sumário)
+## Como executar o projeto
+
+Para executar o projeto usando Expo, siga os passos abaixo:
+
+1. **Instale as dependências**:
+
+   ```bash
+   npm install
+
+2.  **Execute o projeto**:
+
+   ```bash
+   npx expo start
+
+
+
+
+  
