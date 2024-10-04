@@ -1,4 +1,16 @@
-<h1 align="center">MindCare 🎯</h1>
+# Welcome to your Expo app 👋
+
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+
+## Get started
+
+1. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+2. Start the app<h1 align="center">MindCare 🎯</h1>
 <H5 align="center"> Status do projeto: em andamento </H5>
 
 <hr> 
@@ -9,7 +21,9 @@
 - [Tecnologias utilizadas](#Tecnologias-utilizadas)
 - [Backlog do produto](#Backlog-do-produto)
 - [Relatório de entregas](#Relatório-de-entregas)
+- [Protótipo navegável](#Protótipo-navegável)
 - [Modelo de Dados](#Modelo-de-Dados)
+- [Como executar o projeto](#Como-executar-o-projeto)
 
 ## Sobre o projeto
 
@@ -54,17 +68,34 @@ Aqui estão as seguintes tecnologias que utilizamos:
 | Sprint | Período | Status | Relatório |
 |:-----:|:----------:|:---------:|:---------:|
 | 1 | 02/09/2024 - 09/09/2024 | Concluído | [Ver relatório](#Kick-off)|
-| 2 | 09/09/2024 - 29/09/2024 | Em andamento | [Ver relatório](#Sprint-1)|  
+| 2 | 09/09/2024 - 29/09/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
 | 3 | 04/10/2024 - 25/10/2024 | Planejado | [Ver relatório](#Sprint-2)| 
 | 4 | 26/10/2024 - 15/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
 | 5 | 15/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
 
 ## Protótipo navegável
 
-[![Protótipo MindCare](doc/assets/prototipo.jpg)](https://www.figma.com/design/gaXVVA2U5GE9fN5eV7eZlH/MindCare?node-id=223-3&m=dev&t=F2xUlg3IW8UyaIJP-1)
+[![Protótipo MindCare](doc/assets/prototipo.jpg)](https://www.figma.com/proto/gaXVVA2U5GE9fN5eV7eZlH/MindCare?node-id=202-4&node-type=FRAME&t=VeZMjJBzqGrUvI4Y-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=223%3A58)
 
 ## Modelo de Dados
 
 <img src="/doc/assets/modeloLogico.jpg" alt="Modelo Lógico do Banco de Dados">
 
-[➳ Retornar ao início](#Sumário)
+## Como executar o projeto
+
+Para executar o projeto usando Expo, siga os passos abaixo:
+
+1. **Instale as dependências**:
+
+   ```bash
+   npm install
+
+2.  **Execute o projeto**:
+
+   ```bash
+   npx expo start
+
+
+
+
+  
