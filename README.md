@@ -1,8 +1,3 @@
-<h1 align="center">MindCare 🎯</h1>
-<H5 align="center"> Status do projeto: em andamento </H5>
-
-<hr> 
-
 ## Sumário
 
 - [Sobre o projeto](#Sobre-o-projeto)
@@ -73,17 +68,18 @@ Aqui estão as seguintes tecnologias que utilizamos:
 
 Para executar o projeto usando Expo, siga os passos abaixo:
 
-1. **Instale as dependências**:
+1. **Clone o repositório**:
+
+   ```bash
+   git clone https://github.com/Katianefatec/MindCare.git
+   cd MindCare
+
+2. **Instale as dependências**:
 
    ```bash
    npm install
 
-2.  **Execute o projeto**:
+3.  **Execute o projeto**:
 
    ```bash
-   npx expo start
-
-
-
-
-  
+   npx expo start  
