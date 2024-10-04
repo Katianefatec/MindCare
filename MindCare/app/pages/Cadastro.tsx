@@ -32,8 +32,7 @@ const Cadastro = () => {
         gender,
         userId: user.uid,
         date: new Date().toLocaleString(),
-      });
-      Alert.alert('Sucesso', 'Usuário criado com sucesso!');
+      });      
       router.push('/pages/Login');
     });
     } catch (error) {

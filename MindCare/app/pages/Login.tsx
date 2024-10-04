@@ -14,8 +14,7 @@ const Login = () => {
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        Alert.alert("Sucesso", "Login realizado com sucesso!");
+      .then(() => {        
         router.push('/pages/HomePage');
       })
       .catch(error => {

@@ -12,13 +12,14 @@ const loginStyles = StyleSheet.create({
   container: {
     
     paddingTop: 132,
-    paddingBottom: 74,
-    alignContent: "center",    
+    paddingBottom: 75,
+    alignItems: "center",    
   },
   mainImage: {
     height: 188,
     marginBottom: 44,
-    marginHorizontal: 65,
+    alignItems: "center",
+    // marginLeft:20,
   },
   inputContainer: {
     flexDirection: "row",
@@ -49,9 +50,10 @@ const loginStyles = StyleSheet.create({
   loginButton: {
     alignItems: "center",
     backgroundColor: "#19484F",
-    paddingVertical: 13,
+    paddingVertical: 15,
+    paddingHorizontal: 70,
     marginBottom: 10,
-    marginHorizontal: 97,
+    marginHorizontal: 90,
     shadowColor: "#00000040",
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 4 },

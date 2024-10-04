@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, StyleSheet, TextInput } from 'react-native';
+import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Alert, TextInput } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from '@react-navigation/native';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
@@ -21,7 +22,6 @@ const ReflexaoViewBase: React.FC = () => {
   const route = useRoute();
   const { title } = route.params as RouteParams;
   const [reflexoes, setReflexoes] = useState<Reflexao[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [show, setShow] = useState(false);
@@ -70,31 +70,37 @@ const ReflexaoViewBase: React.FC = () => {
     fetchReflexoes();
   }, [title]);
 
-  const handleDelete = async () => {
-    if (!selectedId) return;
-
+  const handleDelete = async (id: string) => {
     const user = auth.currentUser;
     if (!user) {
       console.error("Erro: Usuário não autenticado.");
-      setModalVisible(false);
       return;
     }
 
     try {
-      console.log(`Tentando excluir documento com ID: ${selectedId}`);
-      await deleteDoc(doc(db, 'reflexoes', selectedId));
-      console.log(`Documento com ID: ${selectedId} excluído com sucesso.`);
-      setReflexoes(reflexoes.filter(reflexao => reflexao.id !== selectedId));
-      setModalVisible(false);
+      console.log(`Tentando excluir documento com ID: ${id}`);
+      await deleteDoc(doc(db, 'reflexoes', id));
+      console.log(`Documento com ID: ${id} excluído com sucesso.`);
+      setReflexoes(reflexoes.filter(reflexao => reflexao.id !== id));
     } catch (error) {
       console.error("Erro ao excluir reflexão: ", error);
-      setModalVisible(false);
     }
   };
 
   const confirmDelete = (id: string) => {
-    setSelectedId(id);
-    setModalVisible(true);
+    Alert.alert(
+      "Excluir reflexão",
+      "Você tem certeza que deseja excluir esta reflexão?",
+      [
+        {
+          text: "Não",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Sim", onPress: () => handleDelete(id) }
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -140,34 +146,9 @@ const ReflexaoViewBase: React.FC = () => {
         </ScrollView>
         
         <BottomBar /> 
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={reflexaoPageStyles.centeredView}>
-            <View style={reflexaoPageStyles.modalView}>
-              <Text style={reflexaoPageStyles.modalText}>Excluir reflexão?</Text>
-              <View style={reflexaoPageStyles.buttonContainer}>
-                <TouchableOpacity onPress={() => setModalVisible(false)} style={reflexaoPageStyles.modalButton}>
-                  <Text style={reflexaoPageStyles.modalButtonText}>Não</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleDelete} style={[reflexaoPageStyles.modalButton, reflexaoPageStyles.modalButtonDelete]}>
-                  <Text style={reflexaoPageStyles.modalButtonText}>Sim</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
       </View>
     </ImageBackground>
   );
 };
-
-
 
 export default ReflexaoViewBase;
