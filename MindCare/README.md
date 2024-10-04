@@ -10,41 +10,92 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Start the app<h1 align="center">MindCare 🎯</h1>
+<H5 align="center"> Status do projeto: em andamento </H5>
+
+<hr> 
+
+## Sumário
+
+- [Sobre o projeto](#Sobre-o-projeto)
+- [Tecnologias utilizadas](#Tecnologias-utilizadas)
+- [Backlog do produto](#Backlog-do-produto)
+- [Relatório de entregas](#Relatório-de-entregas)
+- [Protótipo navegável](#Protótipo-navegável)
+- [Modelo de Dados](#Modelo-de-Dados)
+- [Como executar o projeto](#Como-executar-o-projeto)
+
+## Sobre o projeto
+
+O projeto MindCare é uma aplicação voltada para o bem-estar mental dos usuários, oferecendo funcionalidades como registro de humor, diário de pensamentos, notificações de lembretes, ferramentas de autoavaliação, relatórios e gráficos, recursos educacionais, exercícios de relaxamento, comunicação com profissionais de saúde e configurações de privacidade.
+
+## Tecnologias utilizadas
+
+Aqui estão as seguintes tecnologias que utilizamos:
+- React Native para desenvolvimento do front-end
+- Firebase para backend
+- MySQL para banco de dados
+- Figma para prototipação
+- GitHub para controle de versão
+
+## Backlog do Produto
+
+| ID  | Sprint | Categoria | Tarefa |
+|:---:|:------:|:---------:|:------:|
+| 01  | Kick-off      | FrontEnd  | Criação do mockup do projeto no Figma |    
+| 02  | Kick-off      | FrontEnd  | Conversão do mockup em protótipo navegável | 
+| 03  | 1      | BackEnd   | Desenvolvimento da API para registro de humor | 
+| 04  | 1      | BackEnd   | Desenvolvimento da API para diário de pensamentos | 
+| 05  | 1      | FrontEnd  | Implementação da interface de registro de humor | 
+| 06  | 1      | FrontEnd  | Implementação da interface do diário de pensamentos | 
+| 07  | 2      | BackEnd   | Desenvolvimento da API para exercícios de relaxamento |
+| 08  | 2      | BackEnd   | Desenvolvimento da API para recursos educacionais | 
+| 09  | 2      | FrontEnd  | Implementação da interface de exercícios de relaxamento | 
+| 10  | 2      | FrontEnd  | Implementação da interface de recursos educacionais |  
+| 11  | 3      | BackEnd   | Desenvolvimento da API para autoavaliação | 
+| 12  | 3      | BackEnd   | Desenvolvimento da API para relatórios e gráficos | 
+| 13  | 3      | FrontEnd  | Implementação da interface de autoavaliação |
+| 14  | 3      | FrontEnd  | Implementação da interface de relatórios e gráficos |
+| 15  | 4      | BackEnd   | Desenvolvimento da API para comunicação com profissionais de saúde | 
+| 16  | 4      | BackEnd   | Desenvolvimento da API para configurações de perfil | 
+| 17  | 4      | BackEnd   | Desenvolvimento da API para notificações | 
+| 18  | 4      | FrontEnd  | Implementação da interface de comunicação com profissionais de saúde | 
+| 19  | 4      | FrontEnd  | Implementação da interface de configurações de perfil |
+| 20  | 4      | FrontEnd  | Implementação da interface de notificações |  
+
+## Relatório de entregas
+
+| Sprint | Período | Status | Relatório |
+|:-----:|:----------:|:---------:|:---------:|
+| 1 | 02/09/2024 - 09/09/2024 | Concluído | [Ver relatório](#Kick-off)|
+| 2 | 09/09/2024 - 29/09/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
+| 3 | 04/10/2024 - 25/10/2024 | Planejado | [Ver relatório](#Sprint-2)| 
+| 4 | 26/10/2024 - 15/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
+| 5 | 15/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
+
+## Protótipo navegável
+
+[![Protótipo MindCare](doc/assets/prototipo.jpg)](https://www.figma.com/proto/gaXVVA2U5GE9fN5eV7eZlH/MindCare?node-id=202-4&node-type=FRAME&t=VeZMjJBzqGrUvI4Y-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=223%3A58)
+
+## Modelo de Dados
+
+<img src="/doc/assets/modeloLogico.jpg" alt="Modelo Lógico do Banco de Dados">
+
+## Como executar o projeto
+
+Para executar o projeto usando Expo, siga os passos abaixo:
+
+1. **Instale as dependências**:
 
    ```bash
-    npx expo start
-   ```
+   npm install
 
-In the output, you'll find options to open the app in a
+2.  **Execute o projeto**:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npx expo start
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
 
-When you're ready, run:
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+  
