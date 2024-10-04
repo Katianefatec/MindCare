@@ -8,7 +8,7 @@ import GenderPicker from '../components/navigation/GenderPicker';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { db, auth } from '../config/firebaseConfig';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, setDoc, doc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 
 const Cadastro = () => {
@@ -22,9 +22,10 @@ const Cadastro = () => {
 
   const handleSignUp = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      await addDoc(collection(db, 'users'), {
+      createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        await setDoc(doc(db, "users", user.uid), {
         name,
         email,
         birthDate,
@@ -34,6 +35,7 @@ const Cadastro = () => {
       });
       Alert.alert('Sucesso', 'Usuário criado com sucesso!');
       router.push('/pages/Login');
+    });
     } catch (error) {
       const firebaseError = error as FirebaseError;
       if (firebaseError.code === 'auth/email-already-in-use') {
