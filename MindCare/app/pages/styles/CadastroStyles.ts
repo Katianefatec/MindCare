@@ -108,7 +108,7 @@ const cadastroStyles = StyleSheet.create({
     color: '#82997E',
     fontSize: 14,
     paddingVertical: 22,
-    paddingHorizontal: 100,
+    paddingHorizontal: 10,
   },
   inputIOS: {
     color: '#82997E',
@@ -129,6 +129,7 @@ const cadastroStyles = StyleSheet.create({
   },
 
   pickerContainer: {
+    
     paddingHorizontal: 40,
     marginBottom: 30,
   },

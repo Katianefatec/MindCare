@@ -1,7 +1,8 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { ImageBackground, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { db, auth } from '../../config/firebaseConfig';
 import BottomBar from '../../components/navigation/BottomBar';
 import Reflexao from '../../components/navigation/Reflexao';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
@@ -23,6 +24,14 @@ const ReflexaoPage = () => {
     setShow(true);
   };
 
+  const handleSearch = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Usuário não autenticado");
+      return;
+      }
+    };
+
   return (
     <ImageBackground 
       source={require('../../../assets/images/fundoReflexao.png')}
@@ -37,6 +46,9 @@ const ReflexaoPage = () => {
           />
           <TouchableOpacity onPress={showDatepicker}>
             <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSearch}>
+            <FontAwesome name="search" size={24} color="#000" style={reflexaoPageStyles.searchIcon} />
           </TouchableOpacity>
         </View>
         {show && (

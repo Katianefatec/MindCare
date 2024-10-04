@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, StyleSheet, TextInput } from 'react-native';
+import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Modal, TextInput } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from '@react-navigation/native';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
@@ -24,17 +25,19 @@ const ReflexaoViewBase: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [show, setShow] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isStartDatePicker, setIsStartDatePicker] = useState(true);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
-  const showDatepicker = () => {
-    setShow(true);
-  };
-
-  const onChange = (event: any, selectedDate: Date | undefined) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
+  const onChangeDate = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || (isStartDatePicker ? startDate : endDate);
+    setShowDatePicker(false);
+    if (isStartDatePicker) {
+      setStartDate(currentDate);
+    } else {
+      setEndDate(currentDate);
+    }
   };
 
   useEffect(() => {
@@ -97,34 +100,70 @@ const ReflexaoViewBase: React.FC = () => {
     setModalVisible(true);
   };
 
+  const handleSearch = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Usuário não autenticado");
+      return;
+    }
+
+    try {
+      const startFormattedDate = startDate.toLocaleDateString('pt-BR');
+      const endFormattedDate = endDate.toLocaleDateString('pt-BR');
+      const q = query(
+        collection(db, 'reflexoes'),
+        where('category', '==', title),
+        where('userId', '==', user.uid),
+        where('date', '>=', startFormattedDate),
+        where('date', '<=', endFormattedDate)
+      );
+      const querySnapshot = await getDocs(q);
+      const fetchedReflexoes: Reflexao[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as Reflexao;
+        if (data.text.includes(search)) {
+          fetchedReflexoes.push({ id: doc.id, date: data.date, text: data.text });
+        }
+      });
+      setReflexoes(fetchedReflexoes);
+    } catch (error) {
+      console.error("Erro ao buscar reflexões: ", error);
+    }
+  };
+
   return (
     <ImageBackground 
       source={require('../../../assets/images/fundoReflexao.png')}
       style={reflexaoPageStyles.backgroundImage}
     >
       <View style={reflexaoPageStyles.searchContainer}>
-          <TextInput
-            style={reflexaoPageStyles.searchInput}
-            placeholder="Buscar inspiração"
-            value={search}
-            onChangeText={setSearch}
-          />
-          <TouchableOpacity onPress={showDatepicker}>
-            <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
-          </TouchableOpacity>
-        </View>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            display="default"
-            onChange={onChange}
-          />
-        )}
+        <TextInput
+          style={reflexaoPageStyles.searchInput}
+          placeholder="Buscar inspiração"
+          value={search}
+          onChangeText={setSearch}
+        />
+        <TouchableOpacity onPress={() => { setIsStartDatePicker(true); setShowDatePicker(true); }}>
+          <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
+        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => { setIsStartDatePicker(false); setShowDatePicker(true); }}>
+          <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={handleSearch}>
+          <FontAwesome name="search" size={24} color="#000" style={reflexaoPageStyles.searchIcon} />
+        </TouchableOpacity>
+      </View>
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={isStartDatePicker ? startDate : endDate}
+          mode="date"
+          display="default"
+          onChange={onChangeDate}
+        />
+      )}
         
       <View style={reflexaoPageStyles.container2}>
-        
         <Text style={reflexaoPageStyles.greeting2}>Reflexões sobre {title}</Text>
         
         <ScrollView style={reflexaoPageStyles.scrollView}>
@@ -167,7 +206,5 @@ const ReflexaoViewBase: React.FC = () => {
     </ImageBackground>
   );
 };
-
-
 
 export default ReflexaoViewBase;

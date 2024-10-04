@@ -62,7 +62,7 @@ const reflexaoPageStyles = StyleSheet.create({
     alignSelf: 'center',
     marginTop:40,
     marginBottom: 60,
-    width: '70%',
+    width: '80%',
   },
 
   searchContainer2: {
@@ -76,7 +76,7 @@ const reflexaoPageStyles = StyleSheet.create({
     alignSelf: 'center',
     marginTop:40,
     marginBottom: 0,
-    width: '70%',
+    width: '80%',
   },
 
   searchInput: {
@@ -85,7 +85,10 @@ const reflexaoPageStyles = StyleSheet.create({
     fontSize: 16,
   },
   calendarioIcon: {
-    marginLeft: 10,
+    marginRight: 10,
+  },
+  searchIcon: {
+    marginRight: 10,
   },
   title: {
     fontSize: 24,

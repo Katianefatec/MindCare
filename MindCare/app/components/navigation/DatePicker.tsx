@@ -47,7 +47,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ onDateChange }) => {
           onValueChange={(value) => handleDateChange(value, 'year')}
           items={years}
           placeholder={{ label: 'Ano', value: null }}
-          style={cadastroStyles.pickerSelect}
+          style={{
+            inputIOS: cadastroStyles.pickerSelect,
+            inputAndroid: cadastroStyles.pickerSelect,
+          }}
           useNativeAndroidPickerStyle={false}
         />
       </View>
