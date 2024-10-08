@@ -25,7 +25,7 @@ const cadastroStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderColor: "#DBECEF",
+    borderColor: "#000000C9",
     borderWidth: 1,
     paddingVertical: 9,
     paddingHorizontal: 14,
@@ -49,7 +49,7 @@ const cadastroStyles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderColor: "#000000C9",
     borderWidth: 1,
-    paddingVertical: 6,
+    paddingVertical: 10,
     paddingHorizontal: 13,
     marginBottom: 18,
     marginHorizontal: 38,
@@ -102,26 +102,26 @@ const cadastroStyles = StyleSheet.create({
     color: "#82997E",
     fontSize: 13,
   },
-
-  pickerSelect: {
+ 
+  inputIOS: {
     flex: 1,
     color: '#82997E',
-    fontSize: 14,
+    fontSize: 13,
     paddingVertical: 22,
-    paddingHorizontal: 100,
-  },
-  inputIOS: {
-    color: '#82997E',
-    fontSize: 14,
-    paddingVertical: 12,
     paddingHorizontal: 10,
+    
   },
   inputAndroid: {
-    color: '#82997E',
-    fontSize: 14,
-    paddingVertical: 12,
+    flex: 1,   
+    backgroundColor: "#FFFFFF",
+    borderColor: "#000000C9",
+    borderWidth: 1,
+    paddingVertical: 8,
     paddingHorizontal: 10,
+    marginBottom: 15,    
+   
   },
+
   errorMessage: {
     color: 'red',
     marginTop: 10,
@@ -131,6 +131,7 @@ const cadastroStyles = StyleSheet.create({
   pickerContainer: {
     paddingHorizontal: 40,
     marginBottom: 30,
+    
   },
 });
 

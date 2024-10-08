@@ -23,9 +23,13 @@ const GenderPicker: React.FC<GenderPickerProps> = ({ onGenderChange }) => {
         onValueChange={onGenderChange}
         items={genders}
         placeholder={{ label: 'Selecione o gênero', value: null }}
+        
         style={{
-          inputIOS: cadastroStyles.pickerSelect,
-          inputAndroid: cadastroStyles.pickerSelect,
+          inputIOS: cadastroStyles.inputIOS,
+          inputAndroid: cadastroStyles.inputAndroid,
+          placeholder: {
+            color: '#82997E',
+          },
         }}
         useNativeAndroidPickerStyle={false}
       />

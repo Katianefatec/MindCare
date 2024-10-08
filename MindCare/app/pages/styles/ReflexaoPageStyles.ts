@@ -26,24 +26,25 @@ const reflexaoPageStyles = StyleSheet.create({
 
   container3: {    
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 70,
+    paddingHorizontal: 30,
+    paddingVertical: 80,
     marginTop: 20,
     alignItems: 'center',
-    paddingBottom: 20,    
+     
   },
 
   greeting: {
-    fontSize: 30, 
+    fontSize: 20, 
     fontWeight: '700',    
     color: 'white', 
     marginLeft: 10,  
     marginBottom: 55,
+    marginTop:20,
     textAlign: 'center',      
   }, 
   
   greeting2: {
-    fontSize: 25, 
+    fontSize: 20, 
     fontWeight: '700',    
     color: 'white', 
     marginLeft: 10,  
@@ -74,8 +75,8 @@ const reflexaoPageStyles = StyleSheet.create({
     alignContent: 'center',
     textAlign: 'center',
     alignSelf: 'center',
-    marginTop:40,
-    marginBottom: 0,
+    marginTop:30,
+    marginBottom: 50,
     width: '70%',
   },
 
@@ -145,7 +146,7 @@ const reflexaoPageStyles = StyleSheet.create({
     color: '#4A4A4A',
   },
   cardView: {
-    width: 310,
+    width: 320,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 10,
@@ -156,8 +157,8 @@ const reflexaoPageStyles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
-    position: 'relative',
-    marginLeft:25,
+    // position: 'relative',
+    marginLeft:35,
   },
   deleteButton: {
     position: 'absolute',
@@ -165,50 +166,29 @@ const reflexaoPageStyles = StyleSheet.create({
     right: 10,
     padding: 10,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 5,
-    backgroundColor: "#e9f5f7",
-    borderRadius: 5,
-    padding: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 1,
-      height: 1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 10,
-  },
+  
+  
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
   },
-  modalButton: {
-    padding: 5,
-    borderRadius: 3,
-    backgroundColor: '#a5a4a4',
-  },
-  modalButtonDelete: {
-    backgroundColor: 'rgb(224, 31, 31)',
-  },
-  modalButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+
+  datePickerText: {
+    fontSize: 16,
+    color: '#000',
     textAlign: 'center',
+    padding: 10,
   },
-  modalText: {
-    fontSize: 15,
-    marginBottom: 10,
-    textAlign: "center",
+  
+  datePickerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
+
+  
 });
 
 export default reflexaoPageStyles;

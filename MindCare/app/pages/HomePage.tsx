@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View } from 'react-native';
+import { ImageBackground, Text, View, ScrollView } from 'react-native';
 import EmojiGrid from '../components/navigation/EmojiGrid';
 import BottomBar from '../components/navigation/BottomBar';
 import homePageStyles from './styles/HomePageStyles';
@@ -29,12 +29,17 @@ const HomePage = () => {
       style={homePageStyles.backgroundImage}
     >
       <View style={homePageStyles.container}>
-        <Text style={homePageStyles.greeting}>Bom dia, {userName}!</Text>
-        <Text style={homePageStyles.question}>Qual o sentimento de hoje?</Text>
+        <ScrollView style={homePageStyles.scrollView}>
+          <View>
+            <Text style={homePageStyles.greeting}>Bom dia, {userName}!</Text>
+            <Text style={homePageStyles.question}>Qual o sentimento de hoje?</Text>
 
-        <EmojiGrid />
+          <EmojiGrid />
+          </View>
+        </ScrollView>
 
         <BottomBar /> 
+        
       </View>
     </ImageBackground>
   );

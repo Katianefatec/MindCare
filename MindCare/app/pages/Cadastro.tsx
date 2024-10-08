@@ -69,7 +69,7 @@ const Cadastro = () => {
               <MaterialCommunityIcons name="email" size={20} color="#82997E" style={cadastroStyles.icon} />
               <TextInput
                 style={cadastroStyles.input}
-                placeholder="Celular ou e-mail"
+                placeholder="E-mail"
                 placeholderTextColor="#82997E"
                 value={email}
                 onChangeText={setEmail}

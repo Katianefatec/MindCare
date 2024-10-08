@@ -24,8 +24,8 @@ const DatePicker: React.FC<DatePickerProps> = ({ onDateChange }) => {
           items={days}
           placeholder={{ label: 'Dia', value: null }}
           style={{
-            inputIOS: cadastroStyles.pickerSelect,
-            inputAndroid: cadastroStyles.pickerSelect,
+            inputIOS: cadastroStyles.inputIOS,
+            inputAndroid: cadastroStyles.inputAndroid,
           }}
           useNativeAndroidPickerStyle={false}
         />
@@ -36,8 +36,8 @@ const DatePicker: React.FC<DatePickerProps> = ({ onDateChange }) => {
           items={months}
           placeholder={{ label: 'Mês', value: null }}
           style={{
-            inputIOS: cadastroStyles.pickerSelect,
-            inputAndroid: cadastroStyles.pickerSelect,
+            inputIOS: cadastroStyles.inputIOS,
+            inputAndroid: cadastroStyles.inputAndroid,
           }}
           useNativeAndroidPickerStyle={false}
         />
@@ -47,7 +47,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ onDateChange }) => {
           onValueChange={(value) => handleDateChange(value, 'year')}
           items={years}
           placeholder={{ label: 'Ano', value: null }}
-          style={cadastroStyles.pickerSelect}
+          style={{
+            inputIOS: cadastroStyles.inputIOS,
+            inputAndroid: cadastroStyles.inputAndroid,
+          }}
           useNativeAndroidPickerStyle={false}
         />
       </View>

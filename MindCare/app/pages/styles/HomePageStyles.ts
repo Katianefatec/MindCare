@@ -10,23 +10,34 @@ const homePageStyles = StyleSheet.create({
       position: 'absolute',
   },
   container: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 24, 
+    flex: 1,    
+    paddingVertical: 20,
+    paddingHorizontal: 22,
+    alignItems: 'center',    
+    paddingTop:80,   
   },
+
   greeting: {
-    fontSize: 30, 
+    marginTop: 20,
+    fontSize: 20, 
     fontWeight: "bold",
     marginBottom: 8,
     color: 'white', 
-    marginLeft: 10,        
+    marginLeft: 10,
+    alignItems:'center'        
   },
   question: {
     fontSize: 20, 
     marginBottom: 10,
     color: 'white', 
     marginLeft: 10,
+    alignItems:'center' 
   },
+
+  scrollView: {
+    width: '100%',
+  },
+
 });
 
 export default homePageStyles;

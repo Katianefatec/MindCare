@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TextInput, Pressable, Alert } from "react-native";
+import React, { useState, useRef } from "react";
+import { SafeAreaView, View, ScrollView, Image, Text, TextInput, Pressable, Alert, Animated } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import loginStyles from './styles/LoginStyles';
@@ -11,19 +11,33 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {        
-        router.push('/pages/HomePage');
-      })
-      .catch(error => {
-        if (error.code === 'auth/user-not-found') {
-          setErrorMessage("Usuário não cadastrado.");
-        } else {
-          setErrorMessage(error.message);
-        }
-      });
+    Animated.sequence([
+      Animated.timing(fadeAnim, {
+        toValue: 0.3,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {        
+          router.push('/pages/HomePage');
+        })
+        .catch(error => {
+          if (error.code === 'auth/user-not-found') {
+            setErrorMessage("Usuário não cadastrado.");
+          } else {
+            setErrorMessage(error.message);
+          }
+        });
+    });
   };
 
   const handleAlteraSenha = () => {
@@ -42,7 +56,7 @@ const Login = () => {
           <View style={loginStyles.inputContainer}>
             <FontAwesome name="envelope" size={15} color="#000" style={loginStyles.icon} />
             <TextInput
-              placeholder="E-mail ou nome de usuário"
+              placeholder="E-mail"
               value={email}
               onChangeText={setEmail}
               style={loginStyles.input}
@@ -59,9 +73,11 @@ const Login = () => {
             />
           </View>
           {errorMessage ? <Text style={loginStyles.errorMessage}>{errorMessage}</Text> : null}
-          <Pressable onPress={handleLogin} style={loginStyles.loginButton}>
-            <Text style={loginStyles.loginButtonText}>ENTRAR</Text>
-          </Pressable>          
+          <Animated.View style={{ opacity: fadeAnim }}>
+            <Pressable onPress={handleLogin} style={loginStyles.loginButton}>
+              <Text style={loginStyles.loginButtonText}>ENTRAR</Text>
+            </Pressable>
+          </Animated.View>
           <Text onPress={navigateToRegister} style={loginStyles.linkText}>Não possui conta? Clique aqui</Text>
         </View>
       </ScrollView>
