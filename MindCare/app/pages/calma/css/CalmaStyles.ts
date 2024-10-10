@@ -17,12 +17,14 @@ const calmaStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 70,
+    paddingTop: 10,
   },
   greeting: {
     fontSize: 20, 
     fontWeight: "bold",    
     color: 'white', 
     marginLeft: 10,  
+    marginBottom: 10,
     textAlign: 'center',      
   },  
 });

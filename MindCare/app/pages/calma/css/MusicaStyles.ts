@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-const meditarStyles = StyleSheet.create({
+const musicaStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
@@ -20,22 +20,22 @@ const meditarStyles = StyleSheet.create({
     marginLeft: 10,  
     marginTop: 40,
     marginBottom: 15,
-    textAlign: 'center',       
+    textAlign: 'center',      
   },  
 
-  meditationOptions: {
+  musicaOptions: {
     marginTop:20,
     flexDirection: 'column', 
     justifyContent: 'space-between',
     padding: 10,
     width: width * 0.9,
   },
-  meditationOption: {
+  musicaOption: {
     width: '100%',     
     marginVertical: 20,
   },
   
-  meditationTitle: {
+  musicaTitle: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
@@ -54,4 +54,4 @@ const meditarStyles = StyleSheet.create({
   },
 });
 
-export default meditarStyles;
+export default musicaStyles;
