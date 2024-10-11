@@ -9,7 +9,7 @@ const PerfilStyles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       paddingBottom: 70,
-      paddingTop: 10,
+      paddingTop: 40,
     },
     
     title: {

@@ -4,6 +4,7 @@ const { width, height } = Dimensions.get('window');
 
 const cadastroStyles = StyleSheet.create({
   container: {
+    backgroundColor: '#41ACBB',
     flex: 1,
   },
   backgroundImage: {
@@ -133,6 +134,26 @@ const cadastroStyles = StyleSheet.create({
     marginBottom: 30,
     
   },
+
+  title: {
+    fontSize: 20, 
+    fontWeight: "bold",    
+    color: 'white',            
+    marginTop: 80,
+    textAlign: 'center',
+},
+  container2: {
+    backgroundColor: '#41ACBB',
+    flex: 1,
+    paddingHorizontal:5,
+    paddingVertical:30,
+    
+},
+
+column2: {
+  paddingVertical: 60,
+},
+
 });
 
 export default cadastroStyles;
