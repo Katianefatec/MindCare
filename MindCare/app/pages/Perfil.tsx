@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { auth, db } from '../config/firebaseConfig';
 import { useRouter } from 'expo-router';
 import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
-import { VictoryPie, VictoryLabel } from 'victory-native';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryLabel } from 'victory-native';
 import Svg, { G, Text as SvgText } from 'react-native-svg';
 import BottomBar from '../components/navigation/BottomBar';
 import PerfilStyles from './styles/PerfilStyles';
@@ -83,39 +83,47 @@ interface ChartCardProps {
 }
 
 const emotions = [
-  { name: 'Alegria', icon: 'emoticon-excited-outline', color: '#60A355' },
-  { name: 'Calma', icon: 'emoticon-happy-outline', color: '#9EC7DD' },
-  { name: 'Amor', icon: 'emoticon-kiss-outline', color: '#D081CC' },
-  { name: 'Cansaço', icon: 'emoticon-neutral-outline', color: '#B0ADAD' },    
-  { name: 'Medo', icon: 'emoticon-frown-outline', color: '#716F6F' },
-  { name: 'Tristeza', icon: 'emoticon-sad-outline', color: '#849EAC' },
-  { name: 'Aflição', icon: 'emoticon-cry-outline', color: '#644040' },
-  { name: 'Raiva', icon: 'emoticon-angry-outline', color: '#AA1717' },
+  { name: 'Alegria', icon: '😊', color: '#60A355' },
+  { name: 'Calma', icon: '😌', color: '#9EC7DD' },
+  { name: 'Amor', icon: '😍', color: '#D081CC' },
+  { name: 'Cansaço', icon: '😴', color: '#B0ADAD' },    
+  { name: 'Medo', icon: '😱', color: '#716F6F' },
+  { name: 'Tristeza', icon: '😭', color: '#849EAC' },
+  { name: 'Aflição', icon: '😰', color: '#644040' },
+  { name: 'Raiva', icon: '😡', color: '#AA1717' },
 ];
 
 const CustomLabel = (props: any) => {
   const { x, y, datum } = props;
-  const emotion = emotions.find(e => e.name === datum.x);
   return (
     <G>
-      <MaterialCommunityIcons
-        name={emotion?.icon || 'emoticon-neutral-outline'}
-        size={24}
-        color="black"
-        style={{ position: 'absolute', left: x - 12, top: y - 15 }}
-      />
       <SvgText
-        x={x + 2}
-        y={y + 20}
+        x={x}
+        y={y - 10}
         fill="black"
         fontSize="12"
         fontWeight="bold"
         textAnchor="middle"
-        
       >
         {`${datum.y.toFixed(1)}%`}
       </SvgText>
     </G>
+  );
+};
+
+const CustomTick = (props: any) => {
+  const { x, y, datum } = props;
+  const emotion = emotions.find(e => e.name === datum); 
+
+  return (
+    <SvgText
+      x={x}
+      y={y + 20}  
+      textAnchor="middle" 
+      fontSize="32"
+    >
+      {emotion ? emotion.icon : '😐'}
+    </SvgText>
   );
 };
 
@@ -138,19 +146,35 @@ const ChartCard: React.FC<ChartCardProps> = ({ emotionsData }) => {
       <Text style={PerfilStyles.chartTitle}>Ranking das emoções</Text>
       <Text style={PerfilStyles.chartSubtitle}>(últimos 7 dias)</Text>
       <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').width}>
-        <VictoryPie
-          standalone={false}
-          data={chartData}
-          colorScale={chartData.map(d => d.color)}
-          innerRadius={50}
-          padAngle={0} 
-          labels={({ datum }) => `${datum.y.toFixed(1)}%`} 
-          labelRadius={({ innerRadius }) => (typeof innerRadius === 'number' ? innerRadius : 0) + 30}
-          style={{
-            labels: { fill: 'black', fontSize: 12, fontWeight: 'bold' },
-          }}
-          labelComponent={<CustomLabel />}
-        />
+        <VictoryChart
+          theme={VictoryTheme.material}
+          domainPadding={{ x: 50 }}
+        >
+          <VictoryAxis
+            tickValues={chartData.map(d => d.x)}  
+            tickLabelComponent={<VictoryLabel renderInPortal dy={10} />}
+            tickFormat={(t) => {
+              const emotion = emotions.find(e => e.name === t);
+              return emotion ? emotion.icon : t;
+            }}
+          />
+          <VictoryAxis
+            dependentAxis
+            tickFormat={(x) => `${x}%`}
+            domain={[0, 50]}
+          />
+          <VictoryBar
+            data={chartData}
+            x="x"
+            y="y"
+            labels={({ datum }) => `${datum.y.toFixed(1)}%`}
+            style={{
+              data: { fill: ({ datum }) => datum.color },
+              labels: { fill: 'black', fontSize: 12, fontWeight: 'bold' },
+            }}
+            labelComponent={<CustomLabel />}
+          />
+        </VictoryChart>
       </Svg>
     </View>
   );

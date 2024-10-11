@@ -57,7 +57,7 @@ const PerfilStyles = StyleSheet.create({
     },
     calendarIcon: {
       alignSelf: 'flex-end',
-      marginBottom: 10,
+      marginBottom: 15,
     },
     chartImage: {
       width: '100%',
