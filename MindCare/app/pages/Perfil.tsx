@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { auth, db } from '../config/firebaseConfig';
 import { useRouter } from 'expo-router';
@@ -9,6 +9,7 @@ import Svg, { G, Text as SvgText } from 'react-native-svg';
 import BottomBar from '../components/navigation/BottomBar';
 import PerfilStyles from './styles/PerfilStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import aprenderStyles from './calma/css/AprenderStyles';
 
 const Perfil = () => {
   const [emotionsData, setEmotionsData] = useState<EmotionData[]>([]);
@@ -48,8 +49,9 @@ const Perfil = () => {
   };
 
   return (
+    
     <View style={PerfilStyles.container}>
-      
+      <ScrollView contentContainerStyle={PerfilStyles.scrollViewContent}>
         <Text style={PerfilStyles.title}>Perfil</Text>
         <View style={PerfilStyles.card}>
             <View style={PerfilStyles.cardItem} onTouchEnd={handleEditProfile}>
@@ -68,8 +70,10 @@ const Perfil = () => {
             
       </View>
       <ChartCard emotionsData={emotionsData} />
+      </ScrollView>
       <BottomBar />
     </View>
+   
   );
 };
 
@@ -111,21 +115,7 @@ const CustomLabel = (props: any) => {
   );
 };
 
-const CustomTick = (props: any) => {
-  const { x, y, datum } = props;
-  const emotion = emotions.find(e => e.name === datum); 
 
-  return (
-    <SvgText
-      x={x}
-      y={y + 20}  
-      textAnchor="middle" 
-      fontSize="32"
-    >
-      {emotion ? emotion.icon : '😐'}
-    </SvgText>
-  );
-};
 
 const ChartCard: React.FC<ChartCardProps> = ({ emotionsData }) => {
   const totalEmotions = emotionsData.length;
@@ -145,7 +135,7 @@ const ChartCard: React.FC<ChartCardProps> = ({ emotionsData }) => {
     <View style={PerfilStyles.chartCard}>
       <Text style={PerfilStyles.chartTitle}>Ranking das emoções</Text>
       <Text style={PerfilStyles.chartSubtitle}>(últimos 7 dias)</Text>
-      <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').width}>
+      <Svg width={Dimensions.get('window').width * 0.81} height={Dimensions.get('window').height * 0.46} style={{ marginRight: 10, marginLeft: -10}}>
         <VictoryChart
           theme={VictoryTheme.material}
           domainPadding={{ x: 50 }}
