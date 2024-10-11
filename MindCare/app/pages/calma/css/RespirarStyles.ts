@@ -3,26 +3,43 @@ import { StyleSheet } from 'react-native';
 const respirarStyles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 70,
+    paddingTop: 10,
   },
   greeting: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    marginBottom: 20,
-    marginTop: 40, // Ajuste para mover o título para cima
+    fontSize: 20, 
+    fontWeight: "bold",    
+    color: 'white', 
+    marginLeft: 10,  
+    marginBottom: 40,
+    textAlign: 'center',
   },
+
   progressContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 20, 
+    paddingVertical: 30, 
   },
   phaseText: {
-    color: '#B2F5EA',
-    fontSize: 18,
+    color: 'white',
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 10, 
+    marginBottom:30,
+  },
+
+  textContainer: {
+    position: 'absolute',
+    width: 90, 
+    height: 90,    
+    borderRadius: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

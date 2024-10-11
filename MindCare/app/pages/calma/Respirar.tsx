@@ -6,7 +6,6 @@ import Svg, { Circle } from 'react-native-svg';
 import BottomBar from '@/app/components/navigation/BottomBar';
 import respirarStyles from './css/RespirarStyles';
 
-
 const Respirar = () => {
   const [time, setTime] = useState(0);
   const [breathPhase, setBreathPhase] = useState('Inspira');
@@ -71,7 +70,9 @@ const Respirar = () => {
             transform="rotate(-90 50 50)" 
           />
         </Svg>
-        <Text style={respirarStyles.phaseText}>{breathPhase}</Text>
+        <View style={respirarStyles.textContainer}>
+          <Text style={respirarStyles.phaseText}>{breathPhase}</Text>
+        </View>
       </View>
       <BottomBar />
     </View>
