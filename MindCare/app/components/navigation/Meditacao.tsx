@@ -1,6 +1,6 @@
 import meditarStyles from '@/app/pages/calma/css/MeditarStyles';
 import React from 'react';
-import { View, TouchableOpacity, Text, Linking, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const Meditacao = () => {

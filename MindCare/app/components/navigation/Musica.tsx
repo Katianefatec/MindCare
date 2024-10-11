@@ -1,6 +1,6 @@
 import musicaStyles from '@/app/pages/calma/css/MusicaStyles';
 import React from 'react';
-import { View, TouchableOpacity, Text, Linking, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const Musica = () => {
