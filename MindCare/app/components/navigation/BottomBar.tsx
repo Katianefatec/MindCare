@@ -35,8 +35,8 @@ const BottomBar = () => {
       router.push('/pages/ApoioPage'); 
     }
 
-    // if (iconName === 'Perfil') {
-    //   router.push('/pages/Perfil');     }
+    if (iconName === 'Perfil') {
+      router.push('/pages/Perfil');     }
   };
 
   return (

@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-const homePage2Styles = StyleSheet.create({
+const calmaStyles = StyleSheet.create({
   backgroundImage: {
     width: width,
     height: height,
@@ -17,14 +17,16 @@ const homePage2Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 70,
+    paddingTop: 10,
   },
   greeting: {
     fontSize: 20, 
     fontWeight: "bold",    
     color: 'white', 
     marginLeft: 10,  
+    marginBottom: 10,
     textAlign: 'center',      
   },  
 });
 
-export default homePage2Styles;
+export default calmaStyles;

@@ -2,10 +2,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import emojiGridStyles from '../styles/EmojiGridStyles'; // Importe o estilo
+import { auth, db } from '../../config/firebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
+import emojiGridStyles from '../styles/EmojiGridStyles'; 
 
 const EmojiGrid = () => {
-  const router = useRouter(); // Use o hook de navegação
+  const router = useRouter(); 
 
   const emojis = [
     { name: 'Alegria', icon: 'emoticon-excited-outline', color: '#FFD700' },
@@ -18,8 +20,23 @@ const EmojiGrid = () => {
     { name: 'Raiva', icon: 'emoticon-angry-outline', color: '#DC143C' },
   ];
 
-  const handleEmojiPress = (emojiName: string) => {
-    console.log(`Emoji ${emojiName} pressionado!`);
+  const handleEmojiPress = async (emojiName: string) => {
+    console.log(`Emoji ${emojiName} pressionado!`);    
+    
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await addDoc(collection(db, 'emotions'), {
+          userId: user.uid,
+          emotion: emojiName,
+          timestamp: new Date(),
+        });
+        console.log('Escolha da emoção salva com sucesso!');
+      } catch (error) {
+        console.error('Erro ao salvar a escolha da emoção:', error);
+      }
+    }
+
     router.push('/pages/HomePage2'); 
   };
 

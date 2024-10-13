@@ -1,19 +1,19 @@
-import React from 'react';
-import { ImageBackground, Text, View } from 'react-native';
+import React from "react";
+import BottomBar from "@/app/components/navigation/BottomBar";
+import Meditacao from "@/app/components/navigation/Meditacao";
+import { View, Text } from "react-native";
+import meditarStyles from "./css/MeditarStyles";
 
-import homePage2Styles from '../styles/HomePage2Styles';
-import Calma from  '../../components/navigation/Calma'
-import BottomBar from '@/app/components/navigation/BottomBar';
 
 
 const Meditar = () => {
-  return (    
-      <View style={[homePage2Styles.container, { backgroundColor: '#41ACBB' }]}>
-        <Text style={homePage2Styles.greeting}>Meditar</Text>
-        <Calma />
-        <BottomBar /> 
-      </View>
-  );    
-}
+  return (
+    <View style={[meditarStyles.container, { backgroundColor: '#41ACBB' }]}>
+      <Text style={meditarStyles.greeting}>Hora de relaxar</Text>      
+      <Meditacao />
+      <BottomBar />
+    </View>
+  );
+};
 
 export default Meditar;

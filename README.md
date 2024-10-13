@@ -16,8 +16,7 @@ O projeto MindCare é uma aplicação voltada para o bem-estar mental dos usuár
 
 Aqui estão as seguintes tecnologias que utilizamos:
 - React Native para desenvolvimento do front-end
-- Firebase para backend
-- MySQL para banco de dados
+- Firebase como backend as a service
 - Figma para prototipação
 - GitHub para controle de versão
 
@@ -51,10 +50,10 @@ Aqui estão as seguintes tecnologias que utilizamos:
 | Sprint | Período | Status | Relatório |
 |:-----:|:----------:|:---------:|:---------:|
 | 1 | 02/09/2024 - 09/09/2024 | Concluído | [Ver relatório](#Kick-off)|
-| 2 | 09/09/2024 - 29/09/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
-| 3 | 04/10/2024 - 25/10/2024 | Planejado | [Ver relatório](#Sprint-2)| 
-| 4 | 26/10/2024 - 15/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
-| 5 | 15/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
+| 2 | 10/09/2024 - 04/10/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
+| 3 | 05/10/2024 - 25/10/2024 | Planejado | [Ver relatório](#Sprint-2)| 
+| 4 | 26/10/2024 - 18/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
+| 5 | 19/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
 
 ## Protótipo navegável
 

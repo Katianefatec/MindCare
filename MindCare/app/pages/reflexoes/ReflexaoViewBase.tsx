@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Alert, TextInput } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from '@react-navigation/native';
+import { Calendar, DateData } from 'react-native-calendars';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { db, auth } from '../../config/firebaseConfig';
+import moment from 'moment';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 interface Reflexao {
@@ -22,19 +23,50 @@ const ReflexaoViewBase: React.FC = () => {
   const route = useRoute();
   const { title } = route.params as RouteParams;
   const [reflexoes, setReflexoes] = useState<Reflexao[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [show, setShow] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [markedDates, setMarkedDates] = useState<{ [key: string]: { startingDay?: boolean; endingDay?: boolean; color: string; textColor: string } }>({});
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
 
-  const showDatepicker = () => {
-    setShow(true);
-  };
+  const onDayPress = (day: DateData) => {
+    if (!startDate || (startDate && endDate)) {
+      setStartDate(day.dateString);
+      setEndDate(null);
+      setMarkedDates({
+        [day.dateString]: { startingDay: true, color: '#50cebb', textColor: 'white' }
+      });
+    } else {
+      const newMarkedDates = { ...markedDates };
+      const start = new Date(startDate);
+      const end = new Date(day.dateString);
+      const range = [];
 
-  const onChange = (event: any, selectedDate: Date | undefined) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
+      if (start < end) {
+        for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+          range.push(new Date(d));
+        }
+      } else {
+        for (let d = end; d <= start; d.setDate(d.getDate() + 1)) {
+          range.push(new Date(d));
+        }
+      }
+
+      range.forEach((d, index) => {
+        const dateString = d.toISOString().split('T')[0];
+        newMarkedDates[dateString] = {
+          color: '#50cebb',
+          textColor: 'white',
+          startingDay: index === 0,
+          endingDay: index === range.length - 1
+        };
+      });
+
+      setStartDate(startDate);
+      setEndDate(day.dateString);
+      setMarkedDates(newMarkedDates);
+      setShowCalendar(false); 
+    }
   };
 
   useEffect(() => {
@@ -51,15 +83,28 @@ const ReflexaoViewBase: React.FC = () => {
       }
 
       try {
-        const q = query(
+        let q = query(
           collection(db, 'reflexoes'),
           where('category', '==', title),
           where('userId', '==', user.uid)
         );
+
+        // Busca por palavra-chave (usando ">=" e "<=")
+        if (search) {
+          q = query(q, where('text', '>', search), where('text', '<', search + '\uf8ff')); 
+        }
+
+        // Filtro por data (usando moment.js)
+        if (startDate && endDate) {
+          const startTimestamp = moment(startDate, 'DD/MM/YYYY HH:mm:ss').valueOf();
+          const endTimestamp = moment(endDate, 'DD/MM/YYYY HH:mm:ss').valueOf();
+          q = query(q, where('date', '>=', startTimestamp), where('date', '<=', endTimestamp));
+        }
+
         const querySnapshot = await getDocs(q);
         const fetchedReflexoes: Reflexao[] = [];
         querySnapshot.forEach((doc) => {
-          fetchedReflexoes.push({ id: doc.id, ...doc.data() } as Reflexao);
+          fetchedReflexoes.push({ id: doc.id, ...doc.data() } as Reflexao); // Não precisa converter a data para timestamp aqui
         });
         setReflexoes(fetchedReflexoes);
       } catch (error) {
@@ -68,8 +113,7 @@ const ReflexaoViewBase: React.FC = () => {
     };
 
     fetchReflexoes();
-  }, [title]);
-
+  }, [title, search, startDate, endDate]); 
   const handleDelete = async (id: string) => {
     const user = auth.currentUser;
     if (!user) {
@@ -109,31 +153,26 @@ const ReflexaoViewBase: React.FC = () => {
       style={reflexaoPageStyles.backgroundImage}
     >
       <View style={reflexaoPageStyles.searchContainer}>
-          <TextInput
-            style={reflexaoPageStyles.searchInput}
-            placeholder="Buscar inspiração"
-            value={search}
-            onChangeText={setSearch}
-          />
-          <TouchableOpacity onPress={showDatepicker}>
-            <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
-          </TouchableOpacity>
-        </View>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            display="default"
-            onChange={onChange}
-          />
-        )}
-        
+        <TextInput
+          style={reflexaoPageStyles.searchInput}
+          placeholder="Buscar inspiração"
+          value={search}
+          onChangeText={setSearch}
+        />
+        <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
+          <MaterialCommunityIcons name="calendar" size={24} color="#000" style={reflexaoPageStyles.calendarioIcon} />
+        </TouchableOpacity>
+      </View>
+      {showCalendar && (
+        <Calendar
+          markingType={'period'}
+          markedDates={markedDates}
+          onDayPress={onDayPress}
+        />
+      )}
       <View style={reflexaoPageStyles.container2}>
-        
         <Text style={reflexaoPageStyles.greeting2}>Reflexões sobre {title}</Text>
-        
-        <ScrollView style={reflexaoPageStyles.scrollView}>
+        <ScrollView style={reflexaoPageStyles.scrollView} contentContainerStyle={{ paddingBottom: 70 }}>
           {reflexoes.map((reflexao, index) => (
             <View key={index} style={reflexaoPageStyles.cardView}>
               <Text style={reflexaoPageStyles.dateText}>{reflexao.date}</Text>
@@ -144,7 +183,6 @@ const ReflexaoViewBase: React.FC = () => {
             </View>
           ))}
         </ScrollView>
-        
         <BottomBar /> 
       </View>
     </ImageBackground>

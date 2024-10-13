@@ -50,7 +50,7 @@ const loginStyles = StyleSheet.create({
   loginButton: {
     alignItems: "center",
     backgroundColor: "#19484F",
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 70,
     marginBottom: 10,
     marginHorizontal: 90,
@@ -62,7 +62,7 @@ const loginStyles = StyleSheet.create({
   },
   loginButtonText: {
     color: "#FFFFFF",
-    fontSize: 15,
+    fontSize: 14,
   },
   linkText: {
     fontSize: 12,
