@@ -51,7 +51,7 @@ Aqui estão as seguintes tecnologias que utilizamos:
 |:-----:|:----------:|:---------:|:---------:|
 | 1 | 02/09/2024 - 09/09/2024 | Concluído | [Ver relatório](#Kick-off)|
 | 2 | 10/09/2024 - 04/10/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
-| 3 | 05/10/2024 - 25/10/2024 | Planejado | [Ver relatório](#Sprint-2)| 
+| 3 | 05/10/2024 - 25/10/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-2))| 
 | 4 | 26/10/2024 - 18/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
 | 5 | 19/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
 
