@@ -89,11 +89,11 @@ const Cadastro = () => {
             <Text style={cadastroStyles.text2}>
               {"Data de nascimento:"}
             </Text>
-            <DatePicker onDateChange={(date) => setBirthDate(`${date.day}-${date.month}-${date.year}`)} />
+            <DatePicker onDateChange={(date) => setBirthDate(`${date.day}-${date.month}-${date.year}`)} initialDate={new Date()} />
             <Text style={cadastroStyles.text4}>
               {"Gênero:"}
             </Text>
-            <GenderPicker onGenderChange={setGender} />
+            <GenderPicker onGenderChange={setGender} selectedGender={gender} />
             {errorMessage ? <Text style={cadastroStyles.errorMessage}>{errorMessage}</Text> : null}
             <TouchableOpacity style={cadastroStyles.view} onPress={handleSignUp}>
               <Text style={cadastroStyles.text5}>
