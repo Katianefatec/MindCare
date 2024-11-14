@@ -46,7 +46,7 @@ const avaliacaoStyles = StyleSheet.create({
 
   textQuestion: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'justify',
     marginBottom: 20,
   },
@@ -59,14 +59,14 @@ const avaliacaoStyles = StyleSheet.create({
   avaliacaoOptions: {
     marginTop: 20,
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     padding: 10,
     width: width * 0.9,
+    marginRight: 15,
+    paddingHorizontal: 15,
   },
-  avaliacaoOptionContainer: {
-    width: '100%',
-    marginVertical: 20,
-  },
+
+  
   
   scrollViewContent: {
     paddingVertical: 5,
@@ -94,10 +94,10 @@ const avaliacaoStyles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#19484F',
     paddingVertical: 10,
-    paddingHorizontal: 50,
+    paddingHorizontal: 20,
     marginTop: 10,
     marginBottom: 10,
-    marginHorizontal: 70,
+    marginHorizontal: 10,
     shadowColor: '#00000040',
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 4 },
