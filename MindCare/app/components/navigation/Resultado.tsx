@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import avaliacaoStyles from '../styles/AvaliacaoStyles';
 
 type RouteParams = {
-    stress: number;
-    anxiety: number;
-    depression: number;
-    
+    stress: string;
+    anxiety: string;
+    depression: string;
 };
 
 export default function Resultados() {
@@ -19,12 +19,22 @@ export default function Resultados() {
     }
 
   return (
-    <View>
-      <Text>Stress: {stress}</Text>
-      <Text>Ansiedade: {anxiety}</Text>
-      <Text>Depressão: {depression}</Text>
-      
-      
+    <View style={[avaliacaoStyles.container, styles.container]}>
+      <Text style={avaliacaoStyles.greeting}>Resultados da Avaliação</Text>
+      <Text style={styles.resultText}>Stress: {stress}</Text>
+      <Text style={styles.resultText}>Ansiedade: {anxiety}</Text>
+      <Text style={styles.resultText}>Depressão: {depression}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#41ACBB',
+  },
+  resultText: {
+    fontSize: 18,
+    marginVertical: 10,
+    color: 'white',
+  },
+});

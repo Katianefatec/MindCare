@@ -50,7 +50,11 @@ const Avaliacao = ({ navigation }: { navigation: NavigationProp<any> }) => {
         const results = calculateResults(scores);
         router.push({
           pathname: '/components/navigation/Resultado', 
-          params: { results: JSON.stringify(results) }, 
+          params: { 
+            stress: results.stress, 
+            anxiety: results.anxiety, 
+            depression: results.depression 
+          }, 
         });
       }
     };

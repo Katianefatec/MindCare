@@ -1,61 +1,51 @@
 const calculateResults = (scores: { [key: string]: number }) => {
-    let stressScore = 0;
-    let anxietyScore = 0;
-    let depressionScore = 0;
-  
-    // Perguntas relacionadas a Stress (1, 2, 4, 8, 10, 21)
-    const stressQuestions = ['01', '02', '04', '08', '10', '21'];
-    stressQuestions.forEach(key => {
-        if(scores[key] !== undefined){
-            stressScore += scores[key];
-        }
-    })
-  
-    // Perguntas relacionadas a Ansiedade (7, 9, 11, 15)
-    const anxietyQuestions = ['07', '09', '11', '15'];
-    anxietyQuestions.forEach(key => {
-        if(scores[key] !== undefined){
-            anxietyScore += scores[key];
-        }
-    })
-  
-    // Perguntas relacionadas a Depressão (3, 13, 17)
-    const depressionQuestions = ['03', '13', '17'];
-    depressionQuestions.forEach(key => {
-        if(scores[key] !== undefined){
-            depressionScore += scores[key];
-        }
-    })
-  
-    // Classificação dos resultados (adapte as faixas de acordo com suas necessidades)
-  
-    let stressLevel: 'Suave' | 'Moderado' | 'Grave' = 'Suave';
-    if (stressScore > 10 && stressScore <= 18) {
-      stressLevel = 'Moderado';
-    } else if (stressScore > 18) {
-      stressLevel = 'Grave';
+  let stressScore = 0;
+  let anxietyScore = 0;
+  let depressionScore = 0;
+
+  // Perguntas relacionadas a Stress (1, 6, 8, 11, 12, 14, 18)
+  const stressQuestions = ['01', '06', '08', '11', '12', '14', '18'];
+  stressQuestions.forEach(key => {
+    if (scores[key] !== undefined) {
+      stressScore += scores[key];
     }
-  
-    let anxietyLevel: 'Suave' | 'Moderado' | 'Grave' = 'Suave';
-    if (anxietyScore > 6 && anxietyScore <= 12) {
-      anxietyLevel = 'Moderado';
-    } else if (anxietyScore > 12) {
-      anxietyLevel = 'Grave';
+  });
+
+  // Perguntas relacionadas a Ansiedade (2, 4, 7, 9, 15, 19, 20)
+  const anxietyQuestions = ['02', '04', '07', '09', '15', '19', '20'];
+  anxietyQuestions.forEach(key => {
+    if (scores[key] !== undefined) {
+      anxietyScore += scores[key];
     }
-  
-    let depressionLevel: 'Suave' | 'Moderado' | 'Grave' = 'Suave';
-    if (depressionScore > 4 && depressionScore <= 9) {
-        depressionLevel = 'Moderado';
-      } else if (depressionScore > 9) {
-        depressionLevel = 'Grave';
-      }
-  
-    return {
-        stress: stressLevel,
-        anxiety: anxietyLevel,
-        depression: depressionLevel,
-        totalScore: stressScore + anxietyScore + depressionScore 
-    };
+  });
+
+  // Perguntas relacionadas a Depressão (3, 5, 10, 13, 16, 17, 21)
+  const depressionQuestions = ['03', '05', '10', '13', '16', '17', '21'];
+  depressionQuestions.forEach(key => {
+    if (scores[key] !== undefined) {
+      depressionScore += scores[key];
+    }
+  });
+
+  // Classificação dos resultados (adapte as faixas de acordo com suas necessidades)
+  const classifyScore = (score: number, thresholds: number[]) => {
+    if (score <= thresholds[0]) return 'Normal';
+    if (score <= thresholds[1]) return 'Leve';
+    if (score <= thresholds[2]) return 'Moderado';
+    if (score <= thresholds[3]) return 'Grave';
+    return 'Extremamente Grave';
   };
-  
-  export default calculateResults;
+
+  const stressLevel = classifyScore(stressScore, [7, 9, 14, 18]);
+  const anxietyLevel = classifyScore(anxietyScore, [4, 6, 8, 10]);
+  const depressionLevel = classifyScore(depressionScore, [9, 13, 20, 27]);
+
+  return {
+    stress: stressLevel,
+    anxiety: anxietyLevel,
+    depression: depressionLevel,
+    totalScore: stressScore + anxietyScore + depressionScore 
+  };
+};
+
+export default calculateResults;
