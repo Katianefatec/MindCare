@@ -19,7 +19,7 @@ const homePageStyles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 22,
     alignItems: 'center',    
-    paddingTop:80,   
+    paddingTop:50,   
   },
 
   greeting: {

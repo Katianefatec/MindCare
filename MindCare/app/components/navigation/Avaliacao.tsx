@@ -12,14 +12,13 @@ interface QuestionarioProps {
 }
 
 const Questionario: React.FC<QuestionarioProps> = ({ questionText, questionId, onNext, onPrevious, updateScores }) => {
-const [selectedOption, setSelectedOption] = useState<number | null>(null);
-const options = [
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const options = [
     'Não se aplicou de maneira alguma',
     'Aplicou-se em algum grau ou por pouco tempo',
     'Aplicou-se em um grau considerável ou por uma boa parte de tempo',
     'Aplicou-se em grau elevado ou na maioria do tempo'
-];
-
+  ];
 
   const handleOptionPress = (optionValue: number) => {
     setSelectedOption(optionValue);
@@ -28,33 +27,31 @@ const options = [
 
   return (
     <View>
-        <Text>{questionText}</Text>
-        {options.map((option, index) => (
-            <TouchableOpacity
-                key={index}
-                onPress={() => handleOptionPress(index)}
-                style={[avaliacaoStyles.avaliacaoOption, selectedOption === index && avaliacaoStyles.selectedOption]}
-            >
-                <Text>{option}</Text>
-            </TouchableOpacity>
-        ))}
+      <Text style={avaliacaoStyles.textQuestion}>{questionText}</Text>
+      {options.map((option, index) => (
+        <TouchableOpacity
+          key={index}
+          onPress={() => handleOptionPress(index)}
+          style={avaliacaoStyles.optionContainer}
+        >
+          <View style={[avaliacaoStyles.circle, selectedOption === index && avaliacaoStyles.selectedCircle]} />
+          <Text style={avaliacaoStyles.optionText}>{option}</Text>
+        </TouchableOpacity>
+      ))}
 
-        <View style={avaliacaoStyles.buttonContainer}>
-            {onPrevious && (
-                <TouchableOpacity onPress={onPrevious} style={avaliacaoStyles.avaliacaoButton}>
-                    <Text style={avaliacaoStyles.avaliacaoButtonText}>Anterior</Text>
-                </TouchableOpacity>
-            )}
+      <View style={avaliacaoStyles.buttonContainer}>
+        {onPrevious && (
+          <TouchableOpacity onPress={onPrevious} style={avaliacaoStyles.avaliacaoButton}>
+            <Text style={avaliacaoStyles.avaliacaoButtonText}>Anterior</Text>
+          </TouchableOpacity>
+        )}
 
-            <TouchableOpacity onPress={onNext} style={avaliacaoStyles.avaliacaoButton}>
-                <Text style={avaliacaoStyles.avaliacaoButtonText}>Próximo</Text>
-            </TouchableOpacity>
-        </View>
-
+        <TouchableOpacity onPress={onNext} style={avaliacaoStyles.avaliacaoButton}>
+          <Text style={avaliacaoStyles.avaliacaoButtonText}>Próximo</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-);
-
-
+  );
 };
 
 export default Questionario;

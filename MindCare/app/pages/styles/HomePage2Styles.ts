@@ -3,6 +3,9 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const homePage2Styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
   backgroundImage: {
     width: width,
     height: height,
