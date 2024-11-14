@@ -15,7 +15,7 @@ const Instrucoes: React.FC<InstrucoesProps> = ({ onConcluir }) => {
             <Text style={avaliacaoStyles.greeting}>Instruções</Text>
             <View style={avaliacaoStyles.paragraphContainer}>
         <Text style={avaliacaoStyles.text}>
-          Este questionário é composto por 10 perguntas.
+          Este questionário é composto por 22 perguntas.
         </Text>
         <Text style={avaliacaoStyles.text}>
           Leia cuidadosamente cada uma das perguntas e responda considerando o que você sentiu apenas nos últimos sete dias (na última semana).

@@ -27,7 +27,7 @@ const calculateResults = (scores: { [key: string]: number }) => {
     }
   });
 
-  // Classificação dos resultados (adapte as faixas de acordo com suas necessidades)
+  // Classificação dos resultados 
   const classifyScore = (score: number, thresholds: number[]) => {
     if (score <= thresholds[0]) return 'Normal';
     if (score <= thresholds[1]) return 'Leve';
