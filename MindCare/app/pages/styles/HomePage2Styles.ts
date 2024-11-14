@@ -7,24 +7,37 @@ const homePage2Styles = StyleSheet.create({
     width: width,
     height: height,
     resizeMode: 'cover',
-    position: 'absolute',
+    // position: 'absolute',
     
   },
   container: {
-    flex: 1,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 70,
+    flex: 1,       
+    paddingVertical: 20,
+    paddingHorizontal: 22,
+    alignItems: 'center',    
+    paddingTop:80, 
   },
   greeting: {
+    marginTop: 20,
     fontSize: 20, 
-    fontWeight: "bold",    
+    fontWeight: "bold",
+    marginBottom: 8,
     color: 'white', 
-    marginLeft: 10,  
-    textAlign: 'center',      
-  },  
+    marginLeft: 10,
+    alignItems:'center'        
+  },
+  question: {
+    fontSize: 20, 
+    marginBottom: 10,
+    color: 'white', 
+    marginLeft: 10,
+    alignItems:'center' 
+  },
+
+  scrollView: {
+    width: '100%',
+  },
+
 });
 
 export default homePage2Styles;

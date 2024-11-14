@@ -3,12 +3,17 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const homePageStyles = StyleSheet.create({
-  backgroundImage: {    
-      width: width,
-      height: height,
-      resizeMode: 'cover',
-      position: 'absolute',
+  safeAreaView: {
+    flex: 1,
   },
+  backgroundImage: {    
+    width: width,
+    height: height,
+    resizeMode: 'cover',
+    // position: 'absolute',
+  },
+  
+  
   container: {
     flex: 1,    
     paddingVertical: 20,

@@ -11,7 +11,7 @@ const cadastroStyles = StyleSheet.create({
     width: width,
     height: height,
     resizeMode: 'cover',
-    position: 'absolute',
+    // position: 'absolute',
   },
   scrollView: {
     flex: 1,

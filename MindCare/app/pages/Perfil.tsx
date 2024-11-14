@@ -108,6 +108,7 @@ const CustomLabel = (props: any) => {
         fontSize="12"
         fontWeight="bold"
         textAnchor="middle"
+        
       >
         {`${datum.y.toFixed(1)}%`}
       </SvgText>
@@ -135,10 +136,10 @@ const ChartCard: React.FC<ChartCardProps> = ({ emotionsData }) => {
     <View style={PerfilStyles.chartCard}>
       <Text style={PerfilStyles.chartTitle}>Ranking das emoções</Text>
       <Text style={PerfilStyles.chartSubtitle}>(últimos 7 dias)</Text>
-      <Svg width={Dimensions.get('window').width * 0.81} height={Dimensions.get('window').height * 0.46} style={{ marginRight: 10, marginLeft: -10}}>
+      <Svg width={Dimensions.get('window').width * 0.80} height={Dimensions.get('window').height * 0.46} style={{ marginRight: 10, marginLeft: -10}}>
         <VictoryChart
           theme={VictoryTheme.material}
-          domainPadding={{ x: 50 }}
+          domainPadding={{ x: 40 }}
         >
           <VictoryAxis
             tickValues={chartData.map(d => d.x)}  
