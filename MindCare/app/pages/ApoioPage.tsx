@@ -9,7 +9,7 @@ const Apoio = () => {
     
     <View style={[homePage2Styles.container, { backgroundColor: '#41ACBB' }]}>
         <Text style={homePage2Styles.greeting}>Pesquise o profissional</Text>
-        <Momento/>
+        
         <BottomBar /> 
       </View>
     );
