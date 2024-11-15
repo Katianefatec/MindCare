@@ -40,7 +40,7 @@ const avaliacaoStyles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 15,
-    textAlign: 'justify',
+    textAlign: 'left',
     marginBottom: 10,
   },
 

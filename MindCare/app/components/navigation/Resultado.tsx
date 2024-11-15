@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import avaliacaoStyles from '../styles/AvaliacaoStyles';
+import BottomBar from './BottomBar';
 
 type RouteParams = {
     stress: string;
@@ -36,38 +37,25 @@ export default function Resultados() {
     }
 
   return (
-    <View style={[avaliacaoStyles.container, styles.container]}>
-      <Text style={avaliacaoStyles.greeting}>Resultados da Avaliação</Text>
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>Stress: {stress}</Text>
-        <Text style={styles.messageText}>{getMessage(stress, 'estresse')}</Text>
-      </View>
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>Ansiedade: {anxiety}</Text>
-        <Text style={styles.messageText}>{getMessage(anxiety, 'ansiedade')}</Text>
-      </View>
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>Depressão: {depression}</Text>
-        <Text style={styles.messageText}>{getMessage(depression, 'depressão')}</Text>
-      </View>
+    
+      <View style={[avaliacaoStyles.container2, { backgroundColor: '#41ACBB'}]}>
+       <ScrollView contentContainerStyle={avaliacaoStyles.scrollViewContent}>
+
+        <Text style={avaliacaoStyles.greeting}>Resultado</Text>
+        <View style={avaliacaoStyles.avaliacaoOptions}>
+          <Text style={avaliacaoStyles.textQuestion}>Stress: {stress}</Text>
+          <Text style={avaliacaoStyles.text}>{getMessage(stress, 'estresse')}</Text>
+        </View>
+        <View style={avaliacaoStyles.avaliacaoOptions}>
+          <Text style={avaliacaoStyles.textQuestion}>Ansiedade: {anxiety}</Text>
+          <Text style={avaliacaoStyles.text}>{getMessage(anxiety, 'ansiedade')}</Text>
+        </View>
+        <View style={avaliacaoStyles.avaliacaoOptions}>
+          <Text style={avaliacaoStyles.textQuestion}>Depressão: {depression}</Text>
+          <Text style={avaliacaoStyles.text}>{getMessage(depression, 'depressão')}</Text>
+        </View>
+      </ScrollView>  
+      <BottomBar />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#41ACBB',
-  },
-  resultContainer: {
-    marginVertical: 10,
-  },
-  resultText: {
-    fontSize: 18,
-    color: 'white',
-  },
-  messageText: {
-    fontSize: 16,
-    color: 'white',
-    marginTop: 5,
-  },
-});
