@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
-import aprenderStyles from '@/app/pages/calma/css/AprenderStyles';
-import meditarStyles from '@/app/pages/calma/css/MeditarStyles';
+import aprenderStyles from '../../pages/calma/css/AprenderStyles';  
+import meditarStyles from '../../pages/calma/css/MeditarStyles';
 
 const Aprendendo = () => {
   const [currentLink, setCurrentLink] = useState<string | null>(null);

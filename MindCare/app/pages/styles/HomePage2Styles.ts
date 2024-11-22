@@ -3,44 +3,25 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const homePage2Styles = StyleSheet.create({
-  safeAreaView: {
+  container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   backgroundImage: {
     width: width,
     height: height,
     resizeMode: 'cover',
-    // position: 'absolute',
-    
-  },
-  container: {
-    flex: 1,       
-    paddingVertical: 20,
-    paddingHorizontal: 22,
-    alignItems: 'center',    
-    paddingTop:80, 
   },
   greeting: {
-    marginTop: 20,
-    fontSize: 20, 
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: 'white', 
-    marginLeft: 10,
-    alignItems:'center'        
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 20,
   },
-  question: {
-    fontSize: 20, 
-    marginBottom: 10,
-    color: 'white', 
-    marginLeft: 10,
-    alignItems:'center' 
-  },
-
-  scrollView: {
-    width: '100%',
-  },
-
+  
 });
 
 export default homePage2Styles;

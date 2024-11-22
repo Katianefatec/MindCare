@@ -1,6 +1,6 @@
 import React from "react";
-import BottomBar from "@/app/components/navigation/BottomBar";
-import Meditacao from "@/app/components/navigation/Meditacao";
+import BottomBar from "../../components/navigation/BottomBar";
+import Meditacao from "../../components/navigation/Meditacao";
 import { View, Text } from "react-native";
 import meditarStyles from "./css/MeditarStyles";
 

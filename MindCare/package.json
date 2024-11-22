@@ -17,7 +17,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.3",
     "@react-native-async-storage/async-storage": "^1.23.1",
-    "@react-native-community/datetimepicker": "8.0.1",
+    "@react-native-community/datetimepicker": "8.0.1",   
     "@react-native-firebase/auth": "^21.4.1",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
@@ -47,7 +47,9 @@
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.10",
+    "react-native-webrtc": "^1.89.3",
     "react-native-webview": "^13.8.6",
+    "react-native-safe-area-context": "^3.3.2",
     "react-router-dom": "^6.26.2",
     "victory-native": "^37.1.2"
   },
