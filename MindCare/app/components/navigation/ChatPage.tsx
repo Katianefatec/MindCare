@@ -1,12 +1,15 @@
+// ChatPage.tsx
+
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { db, auth } from '../../config/firebaseConfig';
 import { collection, addDoc, query, orderBy, where, onSnapshot } from 'firebase/firestore';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ChatPage = () => {
   const router = useRouter();
-  const { professionalPhone } = useLocalSearchParams();
+  const { professionalId } = useLocalSearchParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
@@ -17,11 +20,13 @@ const ChatPage = () => {
       return;
     }
 
+    const chatId = [user.uid, professionalId].sort().join('_'); // Gera um ID único para o chat
+
     const q = query(
-      collection(db, 'messages'),
-      where('professionalPhone', '==', professionalPhone),
-      orderBy('createdAt', 'desc')
+      collection(db, 'chats', chatId, 'messages'),
+      orderBy('createdAt', 'asc')
     );
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const messages = querySnapshot.docs.map(doc => ({
         _id: doc.id,
@@ -31,7 +36,7 @@ const ChatPage = () => {
     });
 
     return () => unsubscribe();
-  }, [professionalPhone]);
+  }, [professionalId]);
 
   const handleSend = async () => {
     const user = auth.currentUser;
@@ -41,10 +46,11 @@ const ChatPage = () => {
     }
     if (newMessage.trim()) {
       try {
-        await addDoc(collection(db, 'messages'), {
+        const chatId = [user.uid, professionalId].sort().join('_');
+        await addDoc(collection(db, 'chats', chatId, 'messages'), {
           text: newMessage,
-          userId: user.uid,
-          professionalPhone: professionalPhone, // Adiciona o professionalPhone ao documento
+          senderId: user.uid,
+          receiverId: professionalId,
           createdAt: new Date(),
         });
         setNewMessage('');
@@ -54,46 +60,53 @@ const ChatPage = () => {
     }
   };
 
+  const handleVideoCall = () => {
+    router.push({
+      pathname: '/components/navigation/VideoPage',
+      params: { professionalId }
+    });
+  };
+
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.videoButton}
+          onPress={handleVideoCall}
+        >
+          <Icon name="video-camera" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={messages}
         keyExtractor={item => item._id}
         renderItem={({ item }) => (
-          <View style={styles.message}>
+          <View style={item.senderId === auth.currentUser.uid ? styles.myMessage : styles.theirMessage}>
             <Text>{item.text}</Text>
           </View>
         )}
         inverted
       />
-      <TextInput
-        style={styles.input}
-        value={newMessage}
-        onChangeText={setNewMessage}
-        placeholder="Digite sua mensagem"
-      />
-      <Button title="Enviar" onPress={handleSend} />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          value={newMessage}
+          onChangeText={setNewMessage}
+          placeholder="Digite sua mensagem"
+        />
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={handleSend}
+        >
+          <Icon name="send" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  message: {
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    marginBottom: 8,
-  },
+  // ... (seus estilos)
 });
 
 export default ChatPage;

@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-const ApoioPage = StyleSheet.create({
+const ApoioPageStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -69,8 +69,8 @@ const ApoioPage = StyleSheet.create({
     justifyContent: 'space-between',
     width: '50%',
   },
-  chatButton: {
-    backgroundColor: '#007bff',
+  whatsappButton: {
+    backgroundColor: '#25D366', // cor do WhatsApp
     padding: 8,
     borderRadius: 8,
     alignItems: 'center',
@@ -78,8 +78,8 @@ const ApoioPage = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  videoCallButton: {
-    backgroundColor: '#28a745',
+  chatButton: {
+    backgroundColor: '#007bff',
     padding: 8,
     borderRadius: 8,
     alignItems: 'center',
@@ -93,4 +93,4 @@ const ApoioPage = StyleSheet.create({
   },
 });
 
-export default ApoioPage;
+export default ApoioPageStyles;

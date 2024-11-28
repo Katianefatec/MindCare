@@ -1,96 +1,166 @@
-import React, { useState, useRef } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
-import { RTCView, mediaDevices, RTCPeerConnection, RTCIceCandidate, RTCSessionDescription } from 'react-native-webrtc';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Button, StyleSheet, Text } from 'react-native';
+import { RTCView, mediaDevices, RTCPeerConnection, RTCSessionDescription } from 'react-native-webrtc';
+import { db } from '../../config/firebaseConfig';
+import { doc, setDoc, getDoc, collection, onSnapshot, addDoc } from 'firebase/firestore';
+
+const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
 const VideoCallPage = () => {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
-  const localStreamRef = useRef(null);
-  const remoteStreamRef = useRef(null);
-  const peerConnectionRef = useRef(null);
+  const pc = useRef(null);
+  const connecting = useRef(false);
 
-  const startCall = async () => {
-    const stream = await mediaDevices.getUserMedia({
+  useEffect(() => {
+    startLocalStream();
+  }, []);
+
+  const startLocalStream = async () => {
+    const isFrontCamera = true;
+    const devices = await mediaDevices.enumerateDevices();
+
+    const facing = isFrontCamera ? 'front' : 'environment';
+    const videoSourceId = devices.find(
+      (device) => device.kind === 'videoinput' && device.facing === facing
+    );
+
+    const constraints = {
       audio: true,
-      video: true,
+      video: {
+        mandatory: {
+          minWidth: 500, // Provide your own width, height and frame rate here
+          minHeight: 300,
+          minFrameRate: 30,
+        },
+        facingMode: isFrontCamera ? 'user' : 'environment',
+        optional: videoSourceId ? [{ sourceId: videoSourceId.deviceId }] : [],
+      },
+    };
+
+    const newStream = await mediaDevices.getUserMedia(constraints);
+    setLocalStream(newStream);
+  };
+
+  const createOffer = async () => {
+    pc.current = new RTCPeerConnection(configuration);
+    addPCEventListeners();
+
+    localStream.getTracks().forEach(track => {
+      pc.current.addTrack(track, localStream);
     });
-    setLocalStream(stream);
-    localStreamRef.current.srcObject = stream;
 
-    const peerConnection = new RTCPeerConnection({
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-      ],
+    const offer = await pc.current.createOffer();
+    await pc.current.setLocalDescription(offer);
+
+    const callRef = doc(db, 'calls', 'callID');
+    await callRef.set({ offer: pc.current.localDescription.toJSON() });
+
+    // Escutar por resposta
+    callRef.onSnapshot(async snapshot => {
+      const data = snapshot.data();
+      if (!pc.current.currentRemoteDescription && data && data.answer) {
+        const answerDesc = new RTCSessionDescription(data.answer);
+        await pc.current.setRemoteDescription(answerDesc);
+      }
     });
 
-    peerConnection.addStream(stream);
+    // Troca de candidatos ICE
+    callRef.collection('calleeCandidates').onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(async change => {
+        if (change.type === 'added') {
+          const candidate = new RTCIceCandidate(change.doc.data());
+          await pc.current.addIceCandidate(candidate);
+        }
+      });
+    });
+  };
 
-    peerConnection.onicecandidate = (event: any) => {
+  const createAnswer = async () => {
+    const callRef = doc(db, 'calls', 'callID');
+    const callData = (await callRef.get()).data();
+
+    pc.current = new RTCPeerConnection(configuration);
+    addPCEventListeners();
+
+    localStream.getTracks().forEach(track => {
+      pc.current.addTrack(track, localStream);
+    });
+
+    await pc.current.setRemoteDescription(new RTCSessionDescription(callData.offer));
+
+    const answer = await pc.current.createAnswer();
+    await pc.current.setLocalDescription(answer);
+
+    await callRef.update({ answer: pc.current.localDescription.toJSON() });
+
+    // Troca de candidatos ICE
+    callRef.collection('callerCandidates').onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(async change => {
+        if (change.type === 'added') {
+          const candidate = new RTCIceCandidate(change.doc.data());
+          await pc.current.addIceCandidate(candidate);
+        }
+      });
+    });
+  };
+
+  const addPCEventListeners = () => {
+    pc.current.onicecandidate = event => {
       if (event.candidate) {
-        // Enviar o candidato ICE para o outro participante
+        const candidate = event.candidate.toJSON();
+        const callRef = doc(db, 'calls', 'callID');
+        const candidatesCollection = connecting.current ? 'calleeCandidates' : 'callerCandidates';
+        callRef.collection(candidatesCollection).add(candidate);
       }
     };
 
-    peerConnection.ontrack = (event: any) => {
-      if (event.streams && event.streams[0]) {
-        setRemoteStream(event.streams[0]);
-        remoteStreamRef.current.srcObject = event.streams[0];
-      }
+    pc.current.onaddstream = event => {
+      setRemoteStream(event.stream);
     };
-
-    peerConnectionRef.current = peerConnection;
-
-    const offer = await peerConnection.createOffer({});
-    await peerConnection.setLocalDescription(new RTCSessionDescription(offer));
-
-    // Enviar a oferta para o outro participante
-  };
-
-  const handleAnswer = async (answer) => {
-    const peerConnection = peerConnectionRef.current;
-    if (peerConnection) {
-      await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-    }
-  };
-
-  const handleCandidate = async (candidate) => {
-    const peerConnection = peerConnectionRef.current;
-    if (peerConnection) {
-      await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-    }
   };
 
   return (
     <View style={styles.container}>
-      <RTCView
-        streamURL={localStream && localStream.toURL()}
-        style={styles.localVideo}
-      />
-      <RTCView
-        streamURL={remoteStream && remoteStream.toURL()}
-        style={styles.remoteVideo}
-      />
-      <Button title="Iniciar Chamada" onPress={startCall} />
+      <View style={styles.videoContainer}>
+        {localStream && (
+          <RTCView
+            streamURL={localStream.toURL()}
+            style={styles.localVideo}
+          />
+        )}
+        {remoteStream && (
+          <RTCView
+            streamURL={remoteStream.toURL()}
+            style={styles.remoteVideo}
+          />
+        )}
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Fazer Chamada" onPress={createOffer} />
+        <Button title="Atender Chamada" onPress={createAnswer} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  container: { flex: 1 },
+  videoContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   localVideo: {
     width: 100,
     height: 150,
+    position: 'absolute',
+    top: 10,
+    right: 10,
     backgroundColor: 'black',
   },
   remoteVideo: {
-    width: 300,
-    height: 400,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'black',
   },
+  buttonContainer: { flexDirection: 'row', justifyContent: 'space-around', margin: 10 },
 });
 
 export default VideoCallPage;
