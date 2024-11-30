@@ -1,10 +1,10 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { addDoc, collection } from 'firebase/firestore';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { auth, db } from '../../config/firebaseConfig';
-import { addDoc, collection } from 'firebase/firestore';
-import emojiGridStyles from '../styles/EmojiGridStyles'; 
+import { auth, db } from '../../../config/firebaseConfig';
+import emojiGridStyles from '../styles/EmojiGridStyles';
 
 const EmojiGrid = () => {
   const router = useRouter(); 

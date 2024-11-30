@@ -1,11 +1,10 @@
-// ProfessionalLogin.tsx
-
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../../config/firebaseConfig';
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth, db } from '../../../config/firebaseConfig';
+import loginStyles from '../styles/LoginStyles';
 
 const ProfessionalLogin = () => {
   const [email, setEmail] = useState('');
@@ -23,19 +22,19 @@ const ProfessionalLogin = () => {
         return;
       }
       
-      router.push('./professional/dashboard');
+      router.push('/pages/profissionais/ProfessionalDashboard');
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage((error as Error).message);
     }
   };
 
   // Função para navegar para a página de cadastro de profissional
   const navigateToProfessionalRegister = () => {
-    router.push('/pages/CadastroProfissional'); // Certifique-se de que este é o caminho correto para a página de cadastro
+    router.push('/pages/profissionais/CadastroProfissional'); // Certifique-se de que este é o caminho correto para a página de cadastro
   };
 
   return (
-    <View style={styles.container}>
+    <View style={loginStyles.container}>
       <Text style={styles.title}>Login Profissional</Text>
       <TextInput
         placeholder="E-mail"

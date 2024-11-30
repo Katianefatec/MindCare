@@ -1,13 +1,13 @@
 // ApoioPage.tsx
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, Linking } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { useRouter } from 'expo-router';
+import { collection, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Linking, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { db } from '../../config/firebaseConfig';
 import BottomBar from '../components/navigation/BottomBar';
 import ApoioPage from './styles/ApoioPageStyles';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
 
 const Apoio = () => {
   const [search, setSearch] = useState('');

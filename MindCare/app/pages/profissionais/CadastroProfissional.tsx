@@ -1,11 +1,10 @@
-// CadastroProfissional.tsx
-
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../config/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { auth, db } from '../../../config/firebaseConfig';
+import loginStyles from '../styles/LoginStyles';
 
 const CadastroProfissional = () => {
   const [name, setName] = useState('');
@@ -41,7 +40,7 @@ const CadastroProfissional = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={loginStyles.container}>
       <Text style={styles.title}>Cadastro de Profissional</Text>
       <TextInput
         placeholder="Nome"

@@ -1,13 +1,13 @@
+import { useRouter } from 'expo-router';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, ScrollView, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { Alert, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import cadastroStyles from './styles/CadastroStyles';
+import { auth, db } from '../../config/firebaseConfig';
 import DatePicker from '../components/navigation/DatePicker';
-import GenderPicker from '../components/navigation/GenderPicker'; 
-import { auth, db } from '../config/firebaseConfig';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useRouter } from 'expo-router';
+import GenderPicker from '../components/navigation/GenderPicker';
+import cadastroStyles from './styles/CadastroStyles';
 
 const EditarPerfil = () => {
   const [email, setEmail] = useState('');  

@@ -1,13 +1,10 @@
 {
-  "compilerOptions": {
-    "module": "esnext",
-  },
+  "compilerOptions": {},
   "extends": "expo/tsconfig.base",
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts", "app/config/addProfessionals.js",
-    
+    "expo-env.d.ts"
   ]
 }

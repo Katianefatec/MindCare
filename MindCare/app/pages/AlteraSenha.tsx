@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TextInput, Pressable, Alert } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { sendPasswordResetEmail } from 'firebase/auth';
+import React, { useState } from "react";
+import { Alert, Image, Pressable, SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
+import { auth } from '../../config/firebaseConfig';
 import loginStyles from './styles/LoginStyles';
-import { auth } from '../config/firebaseConfig';
 
 const AlteraSenha = () => {
   const [email, setEmail] = useState("");

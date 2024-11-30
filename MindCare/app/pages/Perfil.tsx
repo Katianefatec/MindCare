@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { auth, db } from '../config/firebaseConfig';
 import { useRouter } from 'expo-router';
-import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryLabel } from 'victory-native';
+import { collection, getDocs, query, Timestamp, where } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
 import Svg, { G, Text as SvgText } from 'react-native-svg';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory-native';
+import { auth, db } from '../../config/firebaseConfig';
 import BottomBar from '../components/navigation/BottomBar';
 import PerfilStyles from './styles/PerfilStyles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import aprenderStyles from './calma/css/AprenderStyles';
 
 const Perfil = () => {
   const [emotionsData, setEmotionsData] = useState<EmotionData[]>([]);

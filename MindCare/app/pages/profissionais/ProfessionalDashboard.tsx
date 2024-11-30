@@ -1,14 +1,25 @@
-// pages/professional/Dashboard.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
-import { auth, db } from '../../config/firebaseConfig';
 import { useRouter } from 'expo-router';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth, db } from '../../../config/firebaseConfig';
+
+type User = {
+  id: string;
+  lastMessage: string;
+  lastMessageDate: Date;
+};
 
 const ProfessionalDashboard = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [chatHistory, setChatHistory] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  type Message = {
+    id: string;
+    text: string;
+    createdAt: Date;
+  };
+  
+  const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
@@ -17,28 +28,32 @@ const ProfessionalDashboard = () => {
     const fetchUsers = async () => {
       try {
         const professional = auth.currentUser;
-        const messagesRef = collection(db, 'messages');
-        const q = query(
-          messagesRef,
-          where('professionalId', '==', professional.uid),
-          orderBy('createdAt', 'desc')
-        );
+        if (professional) {
+          const messagesRef = collection(db, 'messages');
+          const q = query(
+            messagesRef,
+            where('professionalId', '==', professional.uid),
+            orderBy('createdAt', 'desc')
+          );
 
-        const querySnapshot = await getDocs(q);
-        const uniqueUsers = new Map();
+          const querySnapshot = await getDocs(q);
+          const uniqueUsers = new Map();
 
-        querySnapshot.docs.forEach(doc => {
-          const data = doc.data();
-          if (!uniqueUsers.has(data.userId)) {
-            uniqueUsers.set(data.userId, {
-              id: data.userId,
-              lastMessage: data.text,
-              lastMessageDate: data.createdAt.toDate(),
-            });
-          }
-        });
+          querySnapshot.docs.forEach(doc => {
+            const data = doc.data();
+            if (!uniqueUsers.has(data.userId)) {
+              uniqueUsers.set(data.userId, {
+                id: data.userId,
+                lastMessage: data.text,
+                lastMessageDate: data.createdAt.toDate(),
+              });
+            }
+          });
 
-        setUsers(Array.from(uniqueUsers.values()));
+          setUsers(Array.from(uniqueUsers.values()));
+        } else {
+          console.error('Professional is not authenticated');
+        }
       } catch (error) {
         console.error('Erro ao buscar usuários:', error);
       }
@@ -48,20 +63,25 @@ const ProfessionalDashboard = () => {
   }, []);
 
   // Buscar histórico de chat do usuário selecionado
-  const fetchChatHistory = async (userId) => {
+  const fetchChatHistory = async (userId: string) => {
     try {
       const messagesRef = collection(db, 'messages');
+      const professional = auth.currentUser;
+      if (!professional) {
+        console.error('Professional is not authenticated');
+        return;
+      }
       const q = query(
         messagesRef,
         where('userId', '==', userId),
-        where('professionalId', '==', auth.currentUser.uid),
+        where('professionalId', '==', professional.uid),
         orderBy('createdAt', 'desc')
       );
 
       const querySnapshot = await getDocs(q);
       const messages = querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        text: doc.data().text,
         createdAt: doc.data().createdAt.toDate(),
       }));
 
@@ -75,6 +95,13 @@ const ProfessionalDashboard = () => {
   const filteredUsers = users.filter(user => 
     user.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleChat = (userId: string) => {
+    router.push({
+      pathname: './components/navigation/ChatPageProfissional',
+      params: { userId }
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -94,14 +121,11 @@ const ProfessionalDashboard = () => {
                 styles.userItem,
                 selectedUser === item.id && styles.selectedUser
               ]}
-              onPress={() => fetchChatHistory(item.id)}
+              onPress={() => handleChat(item.id)}
             >
               <Text style={styles.userName}>Usuário {item.id}</Text>
               <Text style={styles.lastMessage} numberOfLines={1}>
                 {item.lastMessage}
-              </Text>
-              <Text style={styles.messageDate}>
-                {item.lastMessageDate.toLocaleDateString()}
               </Text>
             </TouchableOpacity>
           )}
@@ -143,9 +167,10 @@ const styles = StyleSheet.create({
     borderRightColor: '#ccc',
   },
   searchInput: {
+    height: 40,
+    borderWidth: 1,
+    marginBottom: 10,
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
   userItem: {
     padding: 15,

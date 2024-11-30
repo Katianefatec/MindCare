@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addDoc, collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,24 +13,23 @@ type Message = {
   createdAt: Date;
 };
 
-const ChatPage = () => {
+const ChatPageProfissional = () => {
   const router = useRouter();
-  const { professionalId } = useLocalSearchParams();
+  const { userId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) {
-      console.error("Usuário não autenticado");
+    const professional = auth.currentUser;
+    if (!professional) {
+      console.error("Profissional não autenticado");
       return;
     }
 
-    const chatId = [user.uid, professionalId].sort().join('_'); // Gera um ID único para o chat
+    const chatId = [professional.uid, userId].sort().join('_'); // Gera um ID único para o chat
 
     const q = query(
-      collection(db, 'messages'), // Certifique-se de que a coleção está correta
-      where('chatId', '==', chatId),
+      collection(db, 'chats', chatId, 'messages'),
       orderBy('createdAt', 'asc')
     );
 
@@ -46,22 +45,21 @@ const ChatPage = () => {
     });
 
     return () => unsubscribe();
-  }, [professionalId]);
+  }, [userId]);
 
   const handleSend = async () => {
-    const user = auth.currentUser;
-    if (!user) {
-      console.error("Usuário não autenticado");
+    const professional = auth.currentUser;
+    if (!professional) {
+      console.error("Profissional não autenticado");
       return;
     }
     if (newMessage.trim()) {
       try {
-        const chatId = [user.uid, professionalId].sort().join('_');
-        await addDoc(collection(db, 'messages'), {
+        const chatId = [professional.uid, userId].sort().join('_');
+        await addDoc(collection(db, 'chats', chatId, 'messages'), {
           text: newMessage,
-          senderId: user.uid,
-          receiverId: professionalId,
-          chatId: chatId, // Adicione o chatId ao documento
+          senderId: professional.uid,
+          receiverId: userId,
           createdAt: new Date(),
         });
         setNewMessage('');
@@ -74,7 +72,7 @@ const ChatPage = () => {
   const handleVideoCall = () => {
     router.push({
       pathname: '/components/navigation/VideoPage',
-      params: { professionalId }
+      params: { userId }
     });
   };
 
@@ -125,50 +123,52 @@ const ChatPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 10,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
   },
   videoButton: {
-    backgroundColor: '#41ACBB',
+    backgroundColor: '#007bff',
     padding: 10,
-    borderRadius: 50,
-  },
-  myMessage: {
-    backgroundColor: '#41ACBB',
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    alignSelf: 'flex-end',
-  },
-  theirMessage: {
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    alignSelf: 'flex-start',
+    borderRadius: 5,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    paddingVertical: 10,
   },
   input: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 50,
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
   },
   sendButton: {
-    backgroundColor: '#41ACBB',
+    backgroundColor: '#007bff',
     padding: 10,
-    borderRadius: 50,
-    marginLeft: 10,
+    borderRadius: 5,
   },
-  
+  myMessage: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#dcf8c6',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  theirMessage: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#f1f1f1',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+  },
 });
 
-export default ChatPage;
+export default ChatPageProfissional;
