@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addDoc, collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -48,42 +48,47 @@ const ChatPage = () => {
     return () => unsubscribe();
   }, [professionalId]);
 
+  
+  
   const handleSend = async () => {
-    const user = auth.currentUser;
-    if (!user) {
-      console.error("Usuário não autenticado");
-      return;
-    }
-    if (newMessage.trim()) {
-      try {
-        const chatId = [user.uid, professionalId].sort().join('_');
-        await addDoc(collection(db, 'messages'), {
-          text: newMessage,
-          senderId: user.uid,
-          receiverId: professionalId,
-          chatId: chatId, // Adicione o chatId ao documento
-          createdAt: new Date(),
-        });
-        setNewMessage('');
-      } catch (error) {
-        console.error("Erro ao enviar mensagem: ", error);
+      const user = auth.currentUser;
+      if (!user) {
+        console.error("Usuário não autenticado");
+        return;
       }
-    }
-  };
-
-  const handleVideoCall = () => {
-    router.push({
-      pathname: '/components/navigation/VideoPage',
-      params: { professionalId }
-    });
-  };
+      if (newMessage.trim()) {
+        try {
+          const chatId = [user.uid, professionalId].sort().join('_');
+          
+          // Primeiro, envia a mensagem
+          await addDoc(collection(db, 'messages'), {
+            text: newMessage,
+            senderId: user.uid,
+            receiverId: professionalId,
+            chatId: chatId,
+            createdAt: serverTimestamp(), // Usar serverTimestamp ao invés de new Date()
+          });
+  
+          // Atualiza o documento do chat
+          const chatRef = doc(db, 'chats', chatId);
+          await updateDoc(chatRef, {
+            lastMessage: newMessage,
+            lastMessageTime: serverTimestamp()
+          });
+  
+          setNewMessage('');
+        } catch (error) {
+          console.error("Erro ao enviar mensagem: ", error);
+        }
+      }
+    };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.videoButton}
-          onPress={handleVideoCall}
+          // onPress={handleVideoCall}
         >
           <Icon name="video-camera" size={20} color="#fff" />
         </TouchableOpacity>

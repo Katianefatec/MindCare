@@ -1,13 +1,15 @@
 import { useRouter } from 'expo-router';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, orderBy, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth, db } from '../../../config/firebaseConfig';
 
 type User = {
   id: string;
+  name: string;
   lastMessage: string;
   lastMessageDate: Date;
+  chatId: string;
 };
 
 const ProfessionalDashboard = () => {
@@ -23,36 +25,47 @@ const ProfessionalDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
-  // Buscar lista de usuários que conversaram com o profissional
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const professional = auth.currentUser;
         if (professional) {
-          const messagesRef = collection(db, 'messages');
+          const chatsRef = collection(db, 'chats');
           const q = query(
-            messagesRef,
-            where('professionalId', '==', professional.uid),
-            orderBy('createdAt', 'desc')
+            chatsRef,
+            where('participants', 'array-contains', professional.uid),
+            orderBy('lastMessageTime', 'desc')
           );
 
-          const querySnapshot = await getDocs(q);
-          const uniqueUsers = new Map();
+          const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const uniqueUsers = new Map();
 
-          querySnapshot.docs.forEach(doc => {
-            const data = doc.data();
-            if (!uniqueUsers.has(data.userId)) {
-              uniqueUsers.set(data.userId, {
-                id: data.userId,
-                lastMessage: data.text,
-                lastMessageDate: data.createdAt.toDate(),
-              });
+            for (const doc of querySnapshot.docs) {
+              const chatData = doc.data();
+              const otherParticipantId = chatData.participants.find(
+                id => id !== professional.uid
+              );
+
+              // Buscar informações do usuário
+              const userDocRef = doc(db, 'users', otherParticipantId);
+              const userDoc = await getDoc(userDocRef);
+              const userData = userDoc.data() as { name?: string };
+
+              if (!uniqueUsers.has(otherParticipantId)) {
+                uniqueUsers.set(otherParticipantId, {
+                  id: otherParticipantId,
+                  name: userData?.name || 'Usuário',
+                  lastMessage: chatData.lastMessage || 'Início da conversa',
+                  lastMessageDate: chatData.lastMessageTime?.toDate() || chatData.createdAt.toDate(),
+                  chatId: doc.id
+                });
+              }
             }
+
+            setUsers(Array.from(uniqueUsers.values()));
           });
 
-          setUsers(Array.from(uniqueUsers.values()));
-        } else {
-          console.error('Professional is not authenticated');
+          return () => unsubscribe();
         }
       } catch (error) {
         console.error('Erro ao buscar usuários:', error);
@@ -62,46 +75,16 @@ const ProfessionalDashboard = () => {
     fetchUsers();
   }, []);
 
-  // Buscar histórico de chat do usuário selecionado
-  const fetchChatHistory = async (userId: string) => {
-    try {
-      const messagesRef = collection(db, 'messages');
-      const professional = auth.currentUser;
-      if (!professional) {
-        console.error('Professional is not authenticated');
-        return;
-      }
-      const q = query(
-        messagesRef,
-        where('userId', '==', userId),
-        where('professionalId', '==', professional.uid),
-        orderBy('createdAt', 'desc')
-      );
-
-      const querySnapshot = await getDocs(q);
-      const messages = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        text: doc.data().text,
-        createdAt: doc.data().createdAt.toDate(),
-      }));
-
-      setChatHistory(messages);
-      setSelectedUser(userId);
-    } catch (error) {
-      console.error('Erro ao buscar histórico:', error);
-    }
-  };
-
-  const filteredUsers = users.filter(user => 
-    user.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleChat = (userId: string) => {
+  const handleChat = (userId: string, chatId: string) => {
     router.push({
-      pathname: './components/navigation/ChatPageProfissional',
-      params: { userId }
+      pathname: '/components/navigation/ChatPageProfissional',
+      params: { userId, chatId }
     });
   };
+
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <View style={styles.container}>
@@ -121,12 +104,17 @@ const ProfessionalDashboard = () => {
                 styles.userItem,
                 selectedUser === item.id && styles.selectedUser
               ]}
-              onPress={() => handleChat(item.id)}
+              onPress={() => handleChat(item.id, item.chatId)}
             >
-              <Text style={styles.userName}>Usuário {item.id}</Text>
+              <Text style={styles.userName}>{item.name}</Text>
               <Text style={styles.lastMessage} numberOfLines={1}>
                 {item.lastMessage}
               </Text>
+              {item.lastMessageDate && (
+                <Text style={styles.messageDate}>
+                  {item.lastMessageDate.toLocaleString()}
+                </Text>
+              )}
             </TouchableOpacity>
           )}
         />
