@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,21 +15,20 @@ type Message = {
 
 const ChatPageProfissional = () => {
   const router = useRouter();
-  const { userId } = useLocalSearchParams();
+  const { userId, chatId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
     const professional = auth.currentUser;
-    if (!professional) {
-      console.error("Profissional não autenticado");
+    if (!professional || !chatId) {
+      console.error("Profissional não autenticado ou chatId não fornecido");
       return;
     }
 
-    const chatId = [professional.uid, userId].sort().join('_'); // Gera um ID único para o chat
-
     const q = query(
-      collection(db, 'chats', chatId, 'messages'),
+      collection(db, 'messages'),
+      where('chatId', '==', chatId),
       orderBy('createdAt', 'asc')
     );
 
@@ -39,13 +38,14 @@ const ChatPageProfissional = () => {
         text: doc.data().text,
         senderId: doc.data().senderId,
         receiverId: doc.data().receiverId,
-        createdAt: doc.data().createdAt.toDate(),
+        createdAt: doc.data().createdAt?.toDate() || new Date(),
       }));
+      console.log('Mensagens carregadas:', messages.length); // Debug
       setMessages(messages);
     });
 
     return () => unsubscribe();
-  }, [userId]);
+  }, [chatId]);
 
   const handleSend = async () => {
     const professional = auth.currentUser;
@@ -55,13 +55,31 @@ const ChatPageProfissional = () => {
     }
     if (newMessage.trim()) {
       try {
-        const chatId = [professional.uid, userId].sort().join('_');
-        await addDoc(collection(db, 'chats', chatId, 'messages'), {
+        console.log('Enviando mensagem...', {
+          chatId,
+          professionalId: professional.uid,
+          userId
+        });
+  
+        // Primeiro, envia a mensagem
+        await addDoc(collection(db, 'messages'), {
           text: newMessage,
           senderId: professional.uid,
           receiverId: userId,
-          createdAt: new Date(),
+          chatId: chatId,
+          createdAt: serverTimestamp(),
+          type: 'professional'
         });
+  
+        // Atualiza o documento do chat
+        const chatRef = doc(db, 'chats', chatId as string);
+        await updateDoc(chatRef, {
+          lastMessage: newMessage,
+          lastMessageTime: serverTimestamp(),
+          lastSender: professional.uid
+        });
+  
+        console.log('Mensagem enviada com sucesso');
         setNewMessage('');
       } catch (error) {
         console.error("Erro ao enviar mensagem: ", error);

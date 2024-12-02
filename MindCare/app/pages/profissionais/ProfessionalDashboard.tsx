@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { collection, orderBy, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
+import { collection, orderBy, query, where, onSnapshot, getDoc, doc as firestoreDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth, db } from '../../../config/firebaseConfig';
@@ -33,8 +33,7 @@ const ProfessionalDashboard = () => {
           const chatsRef = collection(db, 'chats');
           const q = query(
             chatsRef,
-            where('participants', 'array-contains', professional.uid),
-            orderBy('lastMessageTime', 'desc')
+            where('participants', 'array-contains', professional.uid)
           );
 
           const unsubscribe = onSnapshot(q, async (querySnapshot) => {
@@ -42,27 +41,30 @@ const ProfessionalDashboard = () => {
 
             for (const doc of querySnapshot.docs) {
               const chatData = doc.data();
+              // Encontra o ID do outro participante (não o profissional)
               const otherParticipantId = chatData.participants.find(
                 id => id !== professional.uid
               );
 
-              // Buscar informações do usuário
-              const userDocRef = doc(db, 'users', otherParticipantId);
-              const userDoc = await getDoc(userDocRef);
-              const userData = userDoc.data() as { name?: string };
+              if (otherParticipantId && !uniqueUsers.has(otherParticipantId)) {
+                // Busca informações do usuário
+                const userDocRef = firestoreDoc(db, 'users', otherParticipantId);
+                const userDoc = await getDoc(userDocRef);
+                const userData = userDoc.data();
 
-              if (!uniqueUsers.has(otherParticipantId)) {
                 uniqueUsers.set(otherParticipantId, {
                   id: otherParticipantId,
                   name: userData?.name || 'Usuário',
                   lastMessage: chatData.lastMessage || 'Início da conversa',
-                  lastMessageDate: chatData.lastMessageTime?.toDate() || chatData.createdAt.toDate(),
+                  lastMessageDate: chatData.lastMessageTime?.toDate() || chatData.createdAt?.toDate() || new Date(),
                   chatId: doc.id
                 });
               }
             }
 
-            setUsers(Array.from(uniqueUsers.values()));
+            const usersArray = Array.from(uniqueUsers.values());
+            console.log('Chats encontrados:', usersArray); // Debug
+            setUsers(usersArray);
           });
 
           return () => unsubscribe();

@@ -14,8 +14,8 @@ type Message = {
 };
 
 const ChatPage = () => {
-  const router = useRouter();
-  const { professionalId } = useLocalSearchParams();
+  
+  const { professionalId, chatId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
 
@@ -26,62 +26,62 @@ const ChatPage = () => {
       return;
     }
 
-    const chatId = [user.uid, professionalId].sort().join('_'); // Gera um ID único para o chat
-
     const q = query(
-      collection(db, 'messages'), // Certifique-se de que a coleção está correta
+      collection(db, 'messages'),
       where('chatId', '==', chatId),
       orderBy('createdAt', 'asc')
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = querySnapshot.docs.map(doc => ({
-        _id: doc.id,
-        text: doc.data().text,
-        senderId: doc.data().senderId,
-        receiverId: doc.data().receiverId,
-        createdAt: doc.data().createdAt.toDate(),
-      }));
+      const messages = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          _id: doc.id,
+          text: data.text,
+          senderId: data.senderId,
+          receiverId: data.receiverId,
+          createdAt: data.createdAt ? data.createdAt.toDate() : new Date(), // Tratamento para data nula
+        };
+      });
       setMessages(messages);
     });
 
     return () => unsubscribe();
-  }, [professionalId]);
+  }, [chatId]);
 
-  
-  
   const handleSend = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        console.error("Usuário não autenticado");
-        return;
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Usuário não autenticado");
+      return;
+    }
+    if (newMessage.trim()) {
+      try {
+        // Primeiro, envia a mensagem
+        await addDoc(collection(db, 'messages'), {
+          text: newMessage,
+          senderId: user.uid,
+          receiverId: professionalId,
+          chatId: chatId,
+          createdAt: serverTimestamp(),
+           type: 'user'
+        });
+
+        // Atualiza o documento do chat
+        const chatRef = doc(db, 'chats', chatId as string);
+        await updateDoc(chatRef, {
+          lastMessage: newMessage,
+          lastMessageTime: serverTimestamp(),
+          participants: [user.uid, professionalId], // Garante que os participantes estejam corretos
+          lastSender: user.uid 
+        });
+
+        setNewMessage('');
+      } catch (error) {
+        console.error("Erro ao enviar mensagem:", error);
       }
-      if (newMessage.trim()) {
-        try {
-          const chatId = [user.uid, professionalId].sort().join('_');
-          
-          // Primeiro, envia a mensagem
-          await addDoc(collection(db, 'messages'), {
-            text: newMessage,
-            senderId: user.uid,
-            receiverId: professionalId,
-            chatId: chatId,
-            createdAt: serverTimestamp(), // Usar serverTimestamp ao invés de new Date()
-          });
-  
-          // Atualiza o documento do chat
-          const chatRef = doc(db, 'chats', chatId);
-          await updateDoc(chatRef, {
-            lastMessage: newMessage,
-            lastMessageTime: serverTimestamp()
-          });
-  
-          setNewMessage('');
-        } catch (error) {
-          console.error("Erro ao enviar mensagem: ", error);
-        }
-      }
-    };
+    }
+  };
 
   return (
     <View style={styles.container}>
