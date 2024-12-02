@@ -107,7 +107,7 @@ const ChatPage = () => {
             </View>
           );
         }}
-        inverted
+        
       />
       <View style={styles.inputContainer}>
         <TextInput
