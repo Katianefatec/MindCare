@@ -1,9 +1,11 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, getDoc } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth, db } from '../../../config/firebaseConfig';
+import VideoPage from './VideoPage';
+import { createDailyRoom } from '../../../config/dayliConfig';
 
 type Message = {
   _id: string;
@@ -18,11 +20,13 @@ const ChatPageProfissional = () => {
   const { userId, chatId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isInCall, setIsInCall] = useState(false);
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const professional = auth.currentUser;
-    if (!professional || !chatId) {
-      console.error("Profissional não autenticado ou chatId não fornecido");
+    if (!professional) {
+      console.error("Usuário não autenticado");
       return;
     }
 
@@ -33,107 +37,118 @@ const ChatPageProfissional = () => {
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = querySnapshot.docs.map(doc => ({
-        _id: doc.id,
-        text: doc.data().text,
-        senderId: doc.data().senderId,
-        receiverId: doc.data().receiverId,
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-      }));
-      console.log('Mensagens carregadas:', messages.length); // Debug
+      const messages = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          _id: doc.id,
+          text: data.text,
+          senderId: data.senderId,
+          receiverId: data.receiverId,
+          createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
+        };
+      });
       setMessages(messages);
     });
 
     return () => unsubscribe();
   }, [chatId]);
 
+  useEffect(() => {
+    const getRoomUrl = async () => {
+      const roomDoc = await getDoc(doc(db, 'videoRooms', chatId as string));
+      if (roomDoc.exists()) {
+        setRoomUrl(roomDoc.data().url);
+      } else {
+        const newRoomUrl = await createDailyRoom(chatId as string);
+        setRoomUrl(newRoomUrl);
+      }
+    };
+
+    getRoomUrl();
+  }, [chatId]);
+
   const handleSend = async () => {
     const professional = auth.currentUser;
     if (!professional) {
-      console.error("Profissional não autenticado");
+      console.error("Usuário não autenticado");
       return;
     }
     if (newMessage.trim()) {
       try {
-        console.log('Enviando mensagem...', {
-          chatId,
-          professionalId: professional.uid,
-          userId
-        });
-  
-        // Primeiro, envia a mensagem
         await addDoc(collection(db, 'messages'), {
           text: newMessage,
           senderId: professional.uid,
           receiverId: userId,
           chatId: chatId,
           createdAt: serverTimestamp(),
-          type: 'professional'
+          type: 'professional',
         });
-  
-        // Atualiza o documento do chat
+
         const chatRef = doc(db, 'chats', chatId as string);
         await updateDoc(chatRef, {
           lastMessage: newMessage,
           lastMessageTime: serverTimestamp(),
-          lastSender: professional.uid
+          participants: [professional.uid, userId],
+          lastSender: professional.uid,
         });
-  
-        console.log('Mensagem enviada com sucesso');
+
         setNewMessage('');
       } catch (error) {
-        console.error("Erro ao enviar mensagem: ", error);
+        console.error("Erro ao enviar mensagem:", error);
       }
     }
   };
 
-  const handleVideoCall = () => {
-    router.push({
-      pathname: '/components/navigation/VideoPage',
-      params: { userId }
-    });
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.videoButton}
-          onPress={handleVideoCall}
-        >
-          <Icon name="video-camera" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
-      <FlatList
-        data={messages}
-        keyExtractor={item => item._id}
-        renderItem={({ item }) => {
-          const currentUser = auth.currentUser;
-          if (!currentUser) {
-            return null;
-          }
-          return (
-            <View style={item.senderId === currentUser.uid ? styles.myMessage : styles.theirMessage}>
-              <Text>{item.text}</Text>
-            </View>
-          );
-        }}
-        
-      />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={setNewMessage}
-          placeholder="Digite sua mensagem"
-        />
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={handleSend}
-        >
-          <Icon name="send" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      {isInCall ? (
+        roomUrl ? (
+          <VideoPage
+            roomId={chatId as string}
+            roomUrl={roomUrl}
+            onEndCall={() => setIsInCall(false)}
+          />
+        ) : (
+          <Text>Carregando URL da sala...</Text>
+        )
+      ) : (
+        <>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.videoButton}
+              onPress={() => setIsInCall(true)}
+            >
+              <Icon name="video-camera" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={messages}
+            keyExtractor={item => item._id}
+            renderItem={({ item }) => {
+              const currentUser = auth.currentUser;
+              if (!currentUser) {
+                return null;
+              }
+              return (
+                <View style={item.senderId === currentUser.uid ? styles.myMessage : styles.theirMessage}>
+                  <Text>{item.text}</Text>
+                </View>
+              );
+            }}
+          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={newMessage}
+              onChangeText={setNewMessage}
+              placeholder="Digite sua mensagem"
+            />
+            <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+              <Icon name="send" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -145,9 +160,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
+    justifyContent: 'flex-end',
+    padding: 10,
   },
   videoButton: {
     backgroundColor: '#007bff',

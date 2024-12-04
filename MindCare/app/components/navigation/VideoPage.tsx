@@ -1,40 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import { Camera } from 'expo-camera';
+import DailyIframe, { DailyCall } from '@daily-co/daily-js';
 
-const VideoCallPage = () => {
-  const [videoUri, setVideoUri] = useState('https://www.w3schools.com/html/mov_bbb.mp4');
-  const videoRef = React.useRef<Video>(null);
+interface VideoPageProps {
+  roomId: string;
+  onEndCall: () => void;
+  roomUrl: string;
+}
+
+const VideoPage: React.FC<VideoPageProps> = ({ roomId, onEndCall, roomUrl }) => {
+  const callRef = useRef<DailyCall | null>(null);
+  const [isJoined, setIsJoined] = useState(false);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Aqui você pode adicionar lógica para buscar a URL do vídeo de uma fonte externa, se necessário
+    const getPermissions = async () => {
+      if (Platform.OS === 'web') {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          setHasPermission(true);
+        } catch (error) {
+          setHasPermission(false);
+        }
+      } else {
+        const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+        const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
+        setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
+      }
+    };
+
+    getPermissions();
   }, []);
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      videoRef.current.getStatusAsync().then(status => {
-        if (status.isLoaded && status.isPlaying) {
-          videoRef.current?.pauseAsync();
-        } else {
-          videoRef.current?.playAsync();
-        }
+  useEffect(() => {
+    const joinCall = async () => {
+      if (!roomUrl) return;
+
+      const call = DailyIframe.createCallObject();
+      callRef.current = call;
+
+      call.on('joined-meeting', () => setIsJoined(true));
+      call.on('left-meeting', () => {
+        setIsJoined(false);
+        onEndCall();
       });
+
+      await call.join({ url: roomUrl });
+    };
+
+    if (hasPermission && roomUrl) {
+      joinCall();
     }
-  };
+
+    return () => {
+      if (callRef.current) {
+        callRef.current.leave();
+        callRef.current.destroy();
+      }
+    };
+  }, [roomUrl, hasPermission]);
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+
+  if (hasPermission === false) {
+    return <Text>Sem acesso à câmera ou microfone</Text>;
+  }
 
   return (
     <View style={styles.container}>
-      <Video
-        ref={videoRef}
-        source={{ uri: videoUri }}
-        rate={1.0}
-        volume={1.0}
-        isMuted={false}
-        resizeMode={ResizeMode.CONTAIN}
-        shouldPlay
-        style={styles.video}
-      />
-      <Button title="Play/Pause" onPress={handlePlayPause} />
+      <Text style={styles.text}>{isJoined ? 'Conectado' : 'Conectando...'}</Text>
+      <TouchableOpacity style={styles.endCallButton} onPress={onEndCall}>
+        <Text style={styles.buttonText}>Encerrar Chamada</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -45,10 +85,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  video: {
-    width: 300,
-    height: 300,
+  text: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  endCallButton: {
+    backgroundColor: '#FF0000',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 
-export default VideoCallPage;
+export default VideoPage;

@@ -1,9 +1,11 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, getDoc } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth, db } from '../../../config/firebaseConfig';
+import VideoPage from './VideoPage';
+import { createDailyRoom } from '../../../config/dayliConfig';
 
 type Message = {
   _id: string;
@@ -14,10 +16,11 @@ type Message = {
 };
 
 const ChatPage = () => {
-  
   const { professionalId, chatId } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isInCall, setIsInCall] = useState(false);
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -40,13 +43,27 @@ const ChatPage = () => {
           text: data.text,
           senderId: data.senderId,
           receiverId: data.receiverId,
-          createdAt: data.createdAt ? data.createdAt.toDate() : new Date(), // Tratamento para data nula
+          createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
         };
       });
       setMessages(messages);
     });
 
     return () => unsubscribe();
+  }, [chatId]);
+
+  useEffect(() => {
+    const getRoomUrl = async () => {
+      const roomDoc = await getDoc(doc(db, 'videoRooms', chatId as string));
+      if (roomDoc.exists()) {
+        setRoomUrl(roomDoc.data().url);
+      } else {
+        const newRoomUrl = await createDailyRoom(chatId as string);
+        setRoomUrl(newRoomUrl);
+      }
+    };
+
+    getRoomUrl();
   }, [chatId]);
 
   const handleSend = async () => {
@@ -57,23 +74,21 @@ const ChatPage = () => {
     }
     if (newMessage.trim()) {
       try {
-        // Primeiro, envia a mensagem
         await addDoc(collection(db, 'messages'), {
           text: newMessage,
           senderId: user.uid,
           receiverId: professionalId,
           chatId: chatId,
           createdAt: serverTimestamp(),
-           type: 'user'
+          type: 'user',
         });
 
-        // Atualiza o documento do chat
         const chatRef = doc(db, 'chats', chatId as string);
         await updateDoc(chatRef, {
           lastMessage: newMessage,
           lastMessageTime: serverTimestamp(),
-          participants: [user.uid, professionalId], // Garante que os participantes estejam corretos
-          lastSender: user.uid 
+          participants: [user.uid, professionalId],
+          lastSender: user.uid,
         });
 
         setNewMessage('');
@@ -85,44 +100,54 @@ const ChatPage = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.videoButton}
-          // onPress={handleVideoCall}
-        >
-          <Icon name="video-camera" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
-      <FlatList
-        data={messages}
-        keyExtractor={item => item._id}
-        renderItem={({ item }) => {
-          const currentUser = auth.currentUser;
-          if (!currentUser) {
-            return null;
-          }
-          return (
-            <View style={item.senderId === currentUser.uid ? styles.myMessage : styles.theirMessage}>
-              <Text>{item.text}</Text>
-            </View>
-          );
-        }}
-        
-      />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={setNewMessage}
-          placeholder="Digite sua mensagem"
-        />
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={handleSend}
-        >
-          <Icon name="send" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      {isInCall ? (
+        roomUrl ? (
+          <VideoPage
+            roomId={chatId as string}
+            roomUrl={roomUrl}
+            onEndCall={() => setIsInCall(false)}
+          />
+        ) : (
+          <Text>Carregando URL da sala...</Text>
+        )
+      ) : (
+        <>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.videoButton}
+              onPress={() => setIsInCall(true)}
+            >
+              <Icon name="video-camera" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={messages}
+            keyExtractor={item => item._id}
+            renderItem={({ item }) => {
+              const currentUser = auth.currentUser;
+              if (!currentUser) {
+                return null;
+              }
+              return (
+                <View style={item.senderId === currentUser.uid ? styles.myMessage : styles.theirMessage}>
+                  <Text>{item.text}</Text>
+                </View>
+              );
+            }}
+          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={newMessage}
+              onChangeText={setNewMessage}
+              placeholder="Digite sua mensagem"
+            />
+            <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+              <Icon name="send" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -173,7 +198,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginLeft: 10,
   },
-  
 });
 
 export default ChatPage;
