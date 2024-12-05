@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, getDoc } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth, db } from '../../../config/firebaseConfig';
 import VideoPage from './VideoPage';
 import { createDailyRoom } from '../../../config/dayliConfig';
+import { Camera } from 'expo-camera';
 
 type Message = {
   _id: string;
@@ -21,6 +22,7 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isInCall, setIsInCall] = useState(false);
   const [roomUrl, setRoomUrl] = useState<string | null>(null);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -53,18 +55,135 @@ const ChatPage = () => {
   }, [chatId]);
 
   useEffect(() => {
-    const getRoomUrl = async () => {
-      const roomDoc = await getDoc(doc(db, 'videoRooms', chatId as string));
-      if (roomDoc.exists()) {
-        setRoomUrl(roomDoc.data().url);
+    const getPermissions = async () => {
+      if (Platform.OS === 'web') {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          setHasPermission(true);
+        } catch (error) {
+          setHasPermission(false);
+        }
       } else {
-        const newRoomUrl = await createDailyRoom(chatId as string);
-        setRoomUrl(newRoomUrl);
+        const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+        const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
+        setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
       }
     };
 
-    getRoomUrl();
-  }, [chatId]);
+    getPermissions();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'notifications'),
+        where('receiverId', '==', auth.currentUser?.uid),
+        where('type', '==', 'video-call')
+      ),
+      (snapshot) => {
+        snapshot.forEach((doc) => {
+          const notification = doc.data();
+          if (!notification.processed) { // Verifica se a notificação já foi processada
+            Alert.alert(
+              'Chamada de vídeo',
+              'Você tem uma chamada de vídeo. Deseja atender?',
+              [
+                { text: 'Recusar', onPress: () => console.log('Chamada recusada') },
+                { 
+                  text: 'Aceitar', 
+                  onPress: async () => {
+                    setRoomUrl(notification.roomUrl);
+                    // Atualiza a notificação como processada
+                    await updateDoc(doc.ref, { processed: true });
+                  }
+                }
+              ]
+            );
+          }
+        });
+      }
+    );
+  
+    return () => unsubscribe();
+  }, []);
+ 
+
+  const handleVideoCall = async () => {
+    if (hasPermission === false) {
+      Alert.alert('Permissão necessária', 'Você precisa permitir o acesso à câmera e ao microfone para fazer chamadas de vídeo.');
+      return;
+    }
+
+    try {
+      // Cria a sala no Daily.co
+      const newRoomUrl = await createDailyRoom(chatId as string);
+      console.log('Nova sala criada:', newRoomUrl);
+
+      // Salva a URL no documento do chat no Firestore
+      const chatRef = doc(db, 'chats', chatId as string);
+      await updateDoc(chatRef, { videoUrl: newRoomUrl });
+
+      // Define a URL da sala no estado para exibir o VideoPage
+      setRoomUrl(newRoomUrl);
+      setIsInCall(true);
+
+      // Envia notificação de chamada para o usuário
+      await addDoc(collection(db, 'notifications'), {
+        type: 'video-call',
+        senderId: auth.currentUser?.uid,
+        receiverId: professionalId,
+        chatId: chatId,
+        roomUrl: newRoomUrl,
+        createdAt: serverTimestamp(),
+        processed: false,
+      });
+    } catch (error) {
+      console.error('Erro ao criar a sala:', error);
+      // Lidar com o erro, ex: exibir uma mensagem para o usuário
+    }
+  };
+
+  useEffect(() => {
+    const processedNotifications = new Set<string>(); // Usar Set para guardar IDs processados
+  
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'notifications'),
+        where('receiverId', '==', auth.currentUser?.uid),
+        where('type', '==', 'video-call')
+      ),
+      (snapshot) => {
+        snapshot.forEach((doc) => {
+          const notification = doc.data();
+  
+          if (!processedNotifications.has(doc.id)) {
+            processedNotifications.add(doc.id); // Marcar notificação como processada
+  
+            Alert.alert(
+              'Chamada de vídeo',
+              'Você tem uma chamada de vídeo. Deseja atender?',
+              [
+                { text: 'Recusar', onPress: () => console.log('Chamada recusada') },
+                { 
+                  text: 'Aceitar', 
+                  onPress: async () => {
+                    setRoomUrl(notification.roomUrl); // Configura a URL da sala para iniciar a chamada
+                    setIsInCall(true); // Ativa o estado para entrar na VideoPage
+  
+                    // Opcional: Atualizar o Firestore indicando que a notificação foi aceita
+                    await updateDoc(doc.ref, { processed: true });
+                  }
+                }
+              ]
+            );
+          }
+        });
+      }
+    );
+  
+    return () => unsubscribe();
+  }, []);
+  
 
   const handleSend = async () => {
     const user = auth.currentUser;
@@ -105,7 +224,10 @@ const ChatPage = () => {
           <VideoPage
             roomId={chatId as string}
             roomUrl={roomUrl}
-            onEndCall={() => setIsInCall(false)}
+            onEndCall={() => {
+              setIsInCall(false);
+              setRoomUrl(null); // Limpa a URL da sala ao encerrar a chamada
+            }}
           />
         ) : (
           <Text>Carregando URL da sala...</Text>
@@ -115,7 +237,7 @@ const ChatPage = () => {
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.videoButton}
-              onPress={() => setIsInCall(true)}
+              onPress={handleVideoCall}
             >
               <Icon name="video-camera" size={20} color="#fff" />
             </TouchableOpacity>

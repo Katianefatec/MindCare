@@ -1,5 +1,3 @@
-// ApoioPage.tsx
-
 import { useRouter } from 'expo-router';
 import { 
   collection, 

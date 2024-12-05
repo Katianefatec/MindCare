@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth, db } from '../../../config/firebaseConfig';
 import VideoPage from './VideoPage';
 import { createDailyRoom } from '../../../config/dayliConfig';
+import { Camera } from 'expo-camera';
+import VideoCallModal from './VideoCallModal'; // Supondo que exista um componente VideoCallModal
 
 type Message = {
   _id: string;
@@ -22,6 +24,9 @@ const ChatPageProfissional = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isInCall, setIsInCall] = useState(false);
   const [roomUrl, setRoomUrl] = useState<string | null>(null);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentNotification, setCurrentNotification] = useState<any>(null);
 
   useEffect(() => {
     const professional = auth.currentUser;
@@ -37,7 +42,7 @@ const ChatPageProfissional = () => {
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = querySnapshot.docs.map(doc => {
+      const messages = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           _id: doc.id,
@@ -54,59 +59,147 @@ const ChatPageProfissional = () => {
   }, [chatId]);
 
   useEffect(() => {
-    const getRoomUrl = async () => {
-      const roomDoc = await getDoc(doc(db, 'videoRooms', chatId as string));
-      if (roomDoc.exists()) {
-        setRoomUrl(roomDoc.data().url);
+    const getPermissions = async () => {
+      if (Platform.OS === 'web') {
+        try {
+          await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          setHasPermission(true);
+        } catch {
+          setHasPermission(false);
+        }
       } else {
-        const newRoomUrl = await createDailyRoom(chatId as string);
-        setRoomUrl(newRoomUrl);
+        const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+        const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
+        setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
       }
     };
 
-    getRoomUrl();
-  }, [chatId]);
+    getPermissions();
+  }, []);
+
+  const handleVideoCall = async () => {
+    if (hasPermission === false) {
+      console.error('Permissão necessária');
+      return;
+    }
+
+    try {
+      const newRoomUrl = await createDailyRoom(chatId as string);
+      const chatRef = doc(db, 'chats', chatId as string);
+      await updateDoc(chatRef, { videoUrl: newRoomUrl });
+
+      setRoomUrl(newRoomUrl);
+      setIsInCall(true);
+
+      await addDoc(collection(db, 'notifications'), {
+        type: 'video-call',
+        senderId: auth.currentUser?.uid,
+        receiverId: userId,
+        chatId: chatId,
+        roomUrl: newRoomUrl,
+        createdAt: serverTimestamp(),
+        processed: false,
+      });
+    } catch (error) {
+      console.error('Erro ao criar a sala:', error);
+    }
+  };
+
+  useEffect(() => {
+    const processedNotifications = new Set<string>();
+
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'notifications'),
+        where('receiverId', '==', auth.currentUser?.uid),
+        where('type', '==', 'video-call'),
+        where('processed', '==', false)
+      ),
+      (snapshot) => {
+        snapshot.forEach((docSnapshot) => {
+          if (!processedNotifications.has(docSnapshot.id)) {
+            processedNotifications.add(docSnapshot.id);
+            setCurrentNotification(docSnapshot.data());
+            setIsModalVisible(true);
+          }
+        });
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleAcceptCall = async () => {
+    if (!currentNotification) {
+      console.error('Erro: Nenhuma notificação disponível.');
+      setIsModalVisible(false);
+      return;
+    }
+  
+    try {
+      setIsModalVisible(false);
+      setRoomUrl(currentNotification.roomUrl);
+      setIsInCall(true);
+  
+      // Marcar a notificação como processada
+      await updateDoc(doc(db, 'notifications', currentNotification.id), {
+        processed: true,
+      });
+    } catch (error) {
+      console.error('Erro ao aceitar a chamada:', error);
+    }
+  };
+  
+
+  const handleDeclineCall = () => {
+    setIsModalVisible(false);
+    console.log('Chamada recusada');
+  };
 
   const handleSend = async () => {
     const professional = auth.currentUser;
-    if (!professional) {
-      console.error("Usuário não autenticado");
-      return;
-    }
-    if (newMessage.trim()) {
-      try {
-        await addDoc(collection(db, 'messages'), {
-          text: newMessage,
-          senderId: professional.uid,
-          receiverId: userId,
-          chatId: chatId,
-          createdAt: serverTimestamp(),
-          type: 'professional',
-        });
+    if (!professional || !newMessage.trim()) return;
 
-        const chatRef = doc(db, 'chats', chatId as string);
-        await updateDoc(chatRef, {
-          lastMessage: newMessage,
-          lastMessageTime: serverTimestamp(),
-          participants: [professional.uid, userId],
-          lastSender: professional.uid,
-        });
+    try {
+      await addDoc(collection(db, 'messages'), {
+        text: newMessage,
+        senderId: professional.uid,
+        receiverId: userId,
+        chatId: chatId,
+        createdAt: serverTimestamp(),
+        type: 'professional',
+      });
 
-        setNewMessage('');
-      } catch (error) {
-        console.error("Erro ao enviar mensagem:", error);
-      }
+      const chatRef = doc(db, 'chats', chatId as string);
+      await updateDoc(chatRef, {
+        lastMessage: newMessage,
+        lastMessageTime: serverTimestamp(),
+        participants: [professional.uid, userId],
+        lastSender: professional.uid,
+      });
+
+      setNewMessage('');
+    } catch (error) {
+      console.error("Erro ao enviar mensagem:", error);
     }
   };
 
   return (
     <View style={styles.container}>
+      <VideoCallModal
+        visible={isModalVisible}
+        onAccept={handleAcceptCall}
+        onDecline={handleDeclineCall}
+      />
       {isInCall ? (
         roomUrl ? (
           <VideoPage
             roomId={chatId as string}
             roomUrl={roomUrl}
-            onEndCall={() => setIsInCall(false)}
+            onEndCall={() => {
+              setIsInCall(false);
+              setRoomUrl(null);
+            }}
           />
         ) : (
           <Text>Carregando URL da sala...</Text>
@@ -114,21 +207,17 @@ const ChatPageProfissional = () => {
       ) : (
         <>
           <View style={styles.header}>
-            <TouchableOpacity
-              style={styles.videoButton}
-              onPress={() => setIsInCall(true)}
-            >
+            <TouchableOpacity style={styles.videoButton} onPress={handleVideoCall}>
               <Icon name="video-camera" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
           <FlatList
             data={messages}
-            keyExtractor={item => item._id}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => {
               const currentUser = auth.currentUser;
-              if (!currentUser) {
-                return null;
-              }
+              if (!currentUser) return null;
+
               return (
                 <View style={item.senderId === currentUser.uid ? styles.myMessage : styles.theirMessage}>
                   <Text>{item.text}</Text>

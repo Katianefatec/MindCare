@@ -14,7 +14,35 @@ export const createDailyRoom = async (roomId: string) => {
         properties: {
           enable_chat: true,
           enable_screenshare: true,
-          enable_knocking: true,
+          enable_knocking: true,          
+          max_participants: 10,          
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${DAILY_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        
+      }
+    );
+    console.log('Sala criada no Daily.co:', response.data);   
+    const roomUrl = response.data.url;
+    await setDoc(doc(db, 'videoRooms', roomId), { url: roomUrl });
+    return roomUrl;
+  } catch (error) {
+    console.error('Erro ao criar sala no Daily.co:', error);
+    throw error;
+  }
+};
+
+export const updateRoomProperties = async (roomId: string) => {
+  try {
+    const response = await axios.patch(
+      `${DAILY_API_URL}/${roomId}`, 
+      {
+        properties: {
+          max_participants: 10,
         },
       },
       {
@@ -24,11 +52,8 @@ export const createDailyRoom = async (roomId: string) => {
         },
       }
     );
-    const roomUrl = response.data.url;
-    await setDoc(doc(db, 'videoRooms', roomId), { url: roomUrl });
-    return roomUrl;
+    console.log('Sala atualizada:', response.data);
   } catch (error) {
-    console.error('Erro ao criar sala no Daily.co:', error);
-    throw error;
+    console.error('Erro ao atualizar a sala:', error);
   }
 };

@@ -22,6 +22,7 @@ const VideoPage: React.FC<VideoPageProps> = ({ roomId, onEndCall, roomUrl }) => 
           setHasPermission(true);
         } catch (error) {
           setHasPermission(false);
+          console.error('Erro ao obter permissões de mídia:', error);
         }
       } else {
         const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
@@ -34,32 +35,90 @@ const VideoPage: React.FC<VideoPageProps> = ({ roomId, onEndCall, roomUrl }) => 
   }, []);
 
   useEffect(() => {
+    const checkPermissions = async () => {
+      const { status: cameraStatus } = await Camera.getCameraPermissionsAsync();
+      console.log('Permissão da câmera:', cameraStatus);
+    };
+    checkPermissions();
+  }, []);
+
+  useEffect(() => {
+    let callTimeout: NodeJS.Timeout;
+
     const joinCall = async () => {
       if (!roomUrl) return;
 
+      console.log('joinCall chamada com a URL:', roomUrl); // Log da URL
+
       const call = DailyIframe.createCallObject();
+
+      try {
+        await call.join({ url: roomUrl });
+      } catch (error) {
+        console.error('Erro ao entrar na sala:', error);
+      }
       callRef.current = call;
 
-      call.on('joined-meeting', () => setIsJoined(true));
+      call.on('joined-meeting', () => {
+        console.log('Usuário entrou na chamada!');
+        setIsJoined(true);
+      });
+
+      call.on('participant-joined', (participant) => {
+        console.log('Outro participante entrou na chamada:', participant);
+      });
+
       call.on('left-meeting', () => {
+        console.log('Usuário saiu da chamada!');
         setIsJoined(false);
         onEndCall();
       });
 
-      await call.join({ url: roomUrl });
+      call.on('error', (error) => {
+        console.error('Erro na chamada:', error);
+
+        let mensagemErro = 'Ocorreu um erro na chamada.';
+        if (error.errorMsg.includes('network')) {
+          mensagemErro = 'Erro de rede. Verifique sua conexão com a internet.';
+        } else if (error.errorMsg.includes('media')) {
+          mensagemErro = 'Erro na câmera ou microfone. Verifique as permissões e configurações.';
+        }
+
+        alert(mensagemErro);
+      });
+
+      try {
+        await call.join({ url: roomUrl });
+      } catch (error) {
+        console.error('Erro ao entrar na sala:', error);
+      }
+
+      // Timeout para lidar com falhas na conexão
+      callTimeout = setTimeout(() => {
+        if (!isJoined) {
+          console.warn('Tempo limite excedido para entrar na chamada.');
+          alert('Erro: Não foi possível conectar à chamada. Tente novamente mais tarde.');
+          onEndCall(); // Encerra a chamada
+        }
+      }, 30000); // 30 segundos
     };
 
+    console.log('VideoPage montado.');
+
+    if (hasPermission && roomUrl) {
     if (hasPermission && roomUrl) {
       joinCall();
     }
+    }
 
     return () => {
+      clearTimeout(callTimeout); // Limpa o timeout ao sair da chamada
       if (callRef.current) {
         callRef.current.leave();
         callRef.current.destroy();
       }
     };
-  }, [roomUrl, hasPermission]);
+  }, [roomUrl, hasPermission, onEndCall]);
 
   if (hasPermission === null) {
     return <View />;
