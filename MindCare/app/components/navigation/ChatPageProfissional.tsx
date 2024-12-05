@@ -26,7 +26,7 @@ const ChatPageProfissional = () => {
   const [roomUrl, setRoomUrl] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentNotification, setCurrentNotification] = useState<any>(null);
+  const [currentNotification, setNotification] = useState<any>(null);
 
   useEffect(() => {
     const professional = auth.currentUser;
@@ -58,24 +58,24 @@ const ChatPageProfissional = () => {
     return () => unsubscribe();
   }, [chatId]);
 
-  // useEffect(() => {
-  //   const getPermissions = async () => {
-  //     if (Platform.OS === 'web') {
-  //       try {
-  //         await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-  //         setHasPermission(true);
-  //       } catch {
-  //         setHasPermission(false);
-  //       }
-  //     } else {
-  //       const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
-  //       const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
-  //       setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
-  //     }
-  //   };
+  useEffect(() => {
+    const getPermissions = async () => {
+      if (Platform.OS === 'web') {
+        try {
+          await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          setHasPermission(true);
+        } catch {
+          setHasPermission(false);
+        }
+      } else {
+        const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+        const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
+        setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
+      }
+    };
 
-  //   getPermissions();
-  // }, []);
+    getPermissions();
+  }, []);
 
   const handleVideoCall = async () => {
     if (hasPermission === false) {
@@ -106,8 +106,6 @@ const ChatPageProfissional = () => {
   };
 
   useEffect(() => {
-    const processedNotifications = new Set<string>();
-
     const unsubscribe = onSnapshot(
       query(
         collection(db, 'notifications'),
@@ -116,23 +114,42 @@ const ChatPageProfissional = () => {
         where('processed', '==', false)
       ),
       (snapshot) => {
-        snapshot.forEach((docSnapshot) => {
-          if (!processedNotifications.has(docSnapshot.id)) {
-            processedNotifications.add(docSnapshot.id);
-            setCurrentNotification({ ...docSnapshot.data(), id: docSnapshot.id });
-            setIsModalVisible(true);
-          }
-        });
+        const recentNotifications = snapshot.docs
+          .map((doc) => {
+            const data = doc.data();
+            const notificationTimestamp = data.createdAt?.toDate();
+            const now = new Date();
+  
+            // Filtra notificações recentes e do chat atual
+            if (
+              data.chatId === chatId &&
+              notificationTimestamp &&
+              now.getTime() - notificationTimestamp.getTime() <= 10 * 60 * 1000
+            ) {
+              return { ...data, id: doc.id };
+            }
+            return null;
+          })
+          .filter((notification) => notification !== null);
+  
+        if (recentNotifications.length > 0) {
+          setNotification(recentNotifications[0]); // Exibe apenas a mais recente
+          setIsModalVisible(true); // Garante que o modal seja exibido
+        } else {
+          setNotification(null);
+          setIsModalVisible(false);
+        }
       }
     );
-
+  
     return () => unsubscribe();
-  }, []);
+  }, [chatId]);
 
-  const handleCloseModal = () => {
+  
+  const handleCloseModal = (url?: string | null) => {
     setIsModalVisible(false);
-    if (currentNotification?.roomUrl) {
-      setRoomUrl(currentNotification.roomUrl);
+    if (url) {
+      setRoomUrl(url);
       setIsInCall(true);
     }
   };

@@ -244,7 +244,7 @@ const ChatPage = () => {
       roomUrl ? (
         <WebView
           source={{ uri: roomUrl }}
-          style={{ padding: 10 }}
+          
         />
         ) : (
           <Text>Carregando URL da sala...</Text>

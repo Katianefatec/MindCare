@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../config/firebaseConfig';
-import { Linking } from 'react-native';
 
 const VideoCallModal = ({ visible, notification, onClose }: { visible: boolean; notification: any; onClose: (url?: string | null) => void }) => {
   if (!visible || !notification) return null;
@@ -14,11 +13,11 @@ const VideoCallModal = ({ visible, notification, onClose }: { visible: boolean; 
         processed: true,
       });
 
-      // Abrir a sala de vídeo na web
+      // Abrir a sala de vídeo
       if (Platform.OS === 'web') {
-        Linking.openURL(notification.roomUrl).catch((err) => console.error("Não foi possível abrir a URL", err));
+        window.open(notification.roomUrl, '_blank');
+        onClose(); 
       } else {
-        // Abrir a sala de vídeo no app usando WebView
         onClose(notification.roomUrl);
       }
     } catch (error) {
@@ -32,8 +31,7 @@ const VideoCallModal = ({ visible, notification, onClose }: { visible: boolean; 
       await updateDoc(doc(db, 'notifications', notification.id), {
         processed: true,
       });
-      console.log('Chamada recusada');
-      onClose(null);
+      onClose(); 
     } catch (error) {
       console.error('Erro ao recusar a chamada:', error);
     }
