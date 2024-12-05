@@ -1,18 +1,53 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, Alert } from 'react-native';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../../config/firebaseConfig';
+import { Linking } from 'react-native';
 
-const VideoCallModal = ({ visible, onAccept, onDecline }: { visible: boolean; onAccept: () => void; onDecline: () => void }) => {
-  if (!visible) return null;
+const VideoCallModal = ({ visible, notification, onClose }: { visible: boolean; notification: any; onClose: (url?: string | null) => void }) => {
+  if (!visible || !notification) return null;
+
+  const handleAcceptCall = async () => {
+    try {
+      // Marcar a notificação como processada
+      await updateDoc(doc(db, 'notifications', notification.id), {
+        processed: true,
+      });
+
+      // Abrir a sala de vídeo na web
+      if (Platform.OS === 'web') {
+        Linking.openURL(notification.roomUrl).catch((err) => console.error("Não foi possível abrir a URL", err));
+      } else {
+        // Abrir a sala de vídeo no app usando WebView
+        onClose(notification.roomUrl);
+      }
+    } catch (error) {
+      console.error('Erro ao aceitar a chamada:', error);
+    }
+  };
+
+  const handleDeclineCall = async () => {
+    try {
+      // Marcar a notificação como processada
+      await updateDoc(doc(db, 'notifications', notification.id), {
+        processed: true,
+      });
+      console.log('Chamada recusada');
+      onClose(null);
+    } catch (error) {
+      console.error('Erro ao recusar a chamada:', error);
+    }
+  };
 
   return (
     <View style={styles.modalOverlay}>
       <View style={styles.modalContainer}>
         <Text style={styles.modalText}>Você tem uma chamada de vídeo. Deseja atender?</Text>
         <View style={styles.modalButtons}>
-          <TouchableOpacity style={[styles.modalButton, styles.declineButton]} onPress={onDecline}>
+          <TouchableOpacity style={[styles.modalButton, styles.declineButton]} onPress={handleDeclineCall}>
             <Text style={styles.modalButtonText}>Recusar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.modalButton, styles.acceptButton]} onPress={onAccept}>
+          <TouchableOpacity style={[styles.modalButton, styles.acceptButton]} onPress={handleAcceptCall}>
             <Text style={styles.modalButtonText}>Aceitar</Text>
           </TouchableOpacity>
         </View>

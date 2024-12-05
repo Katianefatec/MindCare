@@ -105,11 +105,10 @@ const VideoPage: React.FC<VideoPageProps> = ({ roomId, onEndCall, roomUrl }) => 
 
     console.log('VideoPage montado.');
 
-    if (hasPermission && roomUrl) {
-    if (hasPermission && roomUrl) {
+    if (hasPermission && roomUrl) {    
       joinCall();
     }
-    }
+    
 
     return () => {
       clearTimeout(callTimeout); // Limpa o timeout ao sair da chamada

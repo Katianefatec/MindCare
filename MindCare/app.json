@@ -7,7 +7,7 @@
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "android": {
-      "permissions": ["CAMERA", "RECORD_AUDIO"],
+      "permissions": ["CAMERA", "RECORD_AUDIO"]
       
     },
     "ios": {

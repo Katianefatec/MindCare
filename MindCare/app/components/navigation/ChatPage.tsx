@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, getDoc } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth, db } from '../../../config/firebaseConfig';
+import { WebView } from 'react-native-webview';
 import VideoPage from './VideoPage';
 import { createDailyRoom } from '../../../config/dayliConfig';
 import { Camera } from 'expo-camera';
@@ -54,24 +55,24 @@ const ChatPage = () => {
     return () => unsubscribe();
   }, [chatId]);
 
-  useEffect(() => {
-    const getPermissions = async () => {
-      if (Platform.OS === 'web') {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-          setHasPermission(true);
-        } catch (error) {
-          setHasPermission(false);
-        }
-      } else {
-        const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
-        const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
-        setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
-      }
-    };
+  // useEffect(() => {
+  //   const getPermissions = async () => {
+  //     if (Platform.OS === 'web') {
+  //       try {
+  //         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  //         setHasPermission(true);
+  //       } catch (error) {
+  //         setHasPermission(false);
+  //       }
+  //     } else {
+  //       const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+  //       const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
+  //       setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
+  //     }
+  //   };
 
-    getPermissions();
-  }, []);
+  //   getPermissions();
+  // }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -88,14 +89,10 @@ const ChatPage = () => {
               'Chamada de vídeo',
               'Você tem uma chamada de vídeo. Deseja atender?',
               [
-                { text: 'Recusar', onPress: () => console.log('Chamada recusada') },
+                { text: 'Recusar', onPress: () => handleDeclineCall(doc.id) },
                 { 
                   text: 'Aceitar', 
-                  onPress: async () => {
-                    setRoomUrl(notification.roomUrl);
-                    // Atualiza a notificação como processada
-                    await updateDoc(doc.ref, { processed: true });
-                  }
+                  onPress: () => handleAcceptCall(doc.id, notification.roomUrl)
                 }
               ]
             );
@@ -144,8 +141,6 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    const processedNotifications = new Set<string>(); // Usar Set para guardar IDs processados
-  
     const unsubscribe = onSnapshot(
       query(
         collection(db, 'notifications'),
@@ -155,24 +150,15 @@ const ChatPage = () => {
       (snapshot) => {
         snapshot.forEach((doc) => {
           const notification = doc.data();
-  
-          if (!processedNotifications.has(doc.id)) {
-            processedNotifications.add(doc.id); // Marcar notificação como processada
-  
+          if (!notification.processed) { // Verifica se a notificação já foi processada
             Alert.alert(
               'Chamada de vídeo',
               'Você tem uma chamada de vídeo. Deseja atender?',
               [
-                { text: 'Recusar', onPress: () => console.log('Chamada recusada') },
+                { text: 'Recusar', onPress: () => handleDeclineCall(doc.id) },
                 { 
                   text: 'Aceitar', 
-                  onPress: async () => {
-                    setRoomUrl(notification.roomUrl); // Configura a URL da sala para iniciar a chamada
-                    setIsInCall(true); // Ativa o estado para entrar na VideoPage
-  
-                    // Opcional: Atualizar o Firestore indicando que a notificação foi aceita
-                    await updateDoc(doc.ref, { processed: true });
-                  }
+                  onPress: () => handleAcceptCall(doc.id, notification.roomUrl)
                 }
               ]
             );
@@ -183,6 +169,41 @@ const ChatPage = () => {
   
     return () => unsubscribe();
   }, []);
+
+  // const openVideoCallInApp = (roomUrl: string) => {
+  //   return (
+  //     <WebView
+  //       source={{ uri: roomUrl }}
+  //       style={{ marginTop: 20 }}
+  //     />
+  //   );
+  // };
+
+  const handleAcceptCall = async (notificationId: string, roomUrl: string) => {
+    try {
+      setRoomUrl(roomUrl);
+      setIsInCall(true);
+  
+      // Marcar a notificação como processada
+      await updateDoc(doc(db, 'notifications', notificationId), {
+        processed: true,
+      });
+    } catch (error) {
+      console.error('Erro ao aceitar a chamada:', error);
+    }
+  };
+
+  const handleDeclineCall = async (notificationId: string) => {
+    try {
+      // Marcar a notificação como processada
+      await updateDoc(doc(db, 'notifications', notificationId), {
+        processed: true,
+      });
+      console.log('Chamada recusada');
+    } catch (error) {
+      console.error('Erro ao recusar a chamada:', error);
+    }
+  };
   
 
   const handleSend = async () => {
@@ -219,16 +240,12 @@ const ChatPage = () => {
 
   return (
     <View style={styles.container}>
-      {isInCall ? (
-        roomUrl ? (
-          <VideoPage
-            roomId={chatId as string}
-            roomUrl={roomUrl}
-            onEndCall={() => {
-              setIsInCall(false);
-              setRoomUrl(null); // Limpa a URL da sala ao encerrar a chamada
-            }}
-          />
+    {isInCall ? (
+      roomUrl ? (
+        <WebView
+          source={{ uri: roomUrl }}
+          style={{ padding: 10 }}
+        />
         ) : (
           <Text>Carregando URL da sala...</Text>
         )

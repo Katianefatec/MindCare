@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform, Alert, Linking } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -7,7 +7,7 @@ import { auth, db } from '../../../config/firebaseConfig';
 import VideoPage from './VideoPage';
 import { createDailyRoom } from '../../../config/dayliConfig';
 import { Camera } from 'expo-camera';
-import VideoCallModal from './VideoCallModal'; // Supondo que exista um componente VideoCallModal
+import VideoCallModal from './VideoCallModal';
 
 type Message = {
   _id: string;
@@ -58,24 +58,24 @@ const ChatPageProfissional = () => {
     return () => unsubscribe();
   }, [chatId]);
 
-  useEffect(() => {
-    const getPermissions = async () => {
-      if (Platform.OS === 'web') {
-        try {
-          await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-          setHasPermission(true);
-        } catch {
-          setHasPermission(false);
-        }
-      } else {
-        const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
-        const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
-        setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
-      }
-    };
+  // useEffect(() => {
+  //   const getPermissions = async () => {
+  //     if (Platform.OS === 'web') {
+  //       try {
+  //         await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  //         setHasPermission(true);
+  //       } catch {
+  //         setHasPermission(false);
+  //       }
+  //     } else {
+  //       const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+  //       const { status: audioStatus } = await Camera.requestMicrophonePermissionsAsync();
+  //       setHasPermission(cameraStatus === 'granted' && audioStatus === 'granted');
+  //     }
+  //   };
 
-    getPermissions();
-  }, []);
+  //   getPermissions();
+  // }, []);
 
   const handleVideoCall = async () => {
     if (hasPermission === false) {
@@ -119,7 +119,7 @@ const ChatPageProfissional = () => {
         snapshot.forEach((docSnapshot) => {
           if (!processedNotifications.has(docSnapshot.id)) {
             processedNotifications.add(docSnapshot.id);
-            setCurrentNotification(docSnapshot.data());
+            setCurrentNotification({ ...docSnapshot.data(), id: docSnapshot.id });
             setIsModalVisible(true);
           }
         });
@@ -129,31 +129,12 @@ const ChatPageProfissional = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleAcceptCall = async () => {
-    if (!currentNotification) {
-      console.error('Erro: Nenhuma notificação disponível.');
-      setIsModalVisible(false);
-      return;
-    }
-  
-    try {
-      setIsModalVisible(false);
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    if (currentNotification?.roomUrl) {
       setRoomUrl(currentNotification.roomUrl);
       setIsInCall(true);
-  
-      // Marcar a notificação como processada
-      await updateDoc(doc(db, 'notifications', currentNotification.id), {
-        processed: true,
-      });
-    } catch (error) {
-      console.error('Erro ao aceitar a chamada:', error);
     }
-  };
-  
-
-  const handleDeclineCall = () => {
-    setIsModalVisible(false);
-    console.log('Chamada recusada');
   };
 
   const handleSend = async () => {
@@ -188,8 +169,8 @@ const ChatPageProfissional = () => {
     <View style={styles.container}>
       <VideoCallModal
         visible={isModalVisible}
-        onAccept={handleAcceptCall}
-        onDecline={handleDeclineCall}
+        notification={currentNotification}
+        onClose={handleCloseModal}
       />
       {isInCall ? (
         roomUrl ? (
