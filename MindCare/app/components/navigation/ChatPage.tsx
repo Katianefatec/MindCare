@@ -242,10 +242,15 @@ const ChatPage = () => {
     <View style={styles.container}>
     {isInCall ? (
       roomUrl ? (
-        <WebView
+        <View style={styles.container2}>
+        <WebView 
           source={{ uri: roomUrl }}
-          
+          style={styles.webView} 
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          scalesPageToFit={true}
         />
+      </View>
         ) : (
           <Text>Carregando URL da sala...</Text>
         )
@@ -336,6 +341,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 50,
     marginLeft: 10,
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: '#000', // Fundo preto para melhor visualização
+  },
+  webView: {
+    width: '100%', // Garantir que o WebView ocupe toda a largura do container
+    height: '100%', // Garantir que o WebView ocupe toda a altura do container
+    marginTop: 0,
   },
 });
 

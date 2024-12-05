@@ -100,7 +100,16 @@ const ChatPageProfissional = () => {
         createdAt: serverTimestamp(),
         processed: false,
       });
-    } catch (error) {
+
+      setRoomUrl(newRoomUrl);
+    setIsInCall(true);
+    setIsModalVisible(false); // Fecha o modal "chamando"
+
+    // Abre a sala imediatamente
+    if (Platform.OS === 'web') {
+      window.open(newRoomUrl, '_blank'); // Abre em nova aba no navegador
+    }
+  } catch (error) {
       console.error('Erro ao criar a sala:', error);
     }
   };
