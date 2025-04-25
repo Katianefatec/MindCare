@@ -7,7 +7,7 @@ const calmaStyles = StyleSheet.create({
     width: width,
     height: height,
     resizeMode: 'cover',
-    position: 'absolute',
+    // position: 'absolute',
     
   },
   container: {

@@ -1,15 +1,15 @@
+import { useRouter } from 'expo-router';
+import { FirebaseError } from 'firebase/app';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, ImageBackground, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { ImageBackground, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import cadastroStyles from '../pages/styles/CadastroStyles';
+import { auth, db } from '../../config/firebaseConfig';
 import DatePicker from '../components/navigation/DatePicker';
-import GenderPicker from '../components/navigation/GenderPicker'; 
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { FirebaseError } from 'firebase/app';
-import { db, auth } from '../config/firebaseConfig';
-import { collection, setDoc, doc } from 'firebase/firestore';
-import { useRouter } from 'expo-router';
+import GenderPicker from '../components/navigation/GenderPicker';
+import cadastroStyles from '../pages/styles/CadastroStyles';
 
 const Cadastro = () => {
   const [email, setEmail] = useState('');

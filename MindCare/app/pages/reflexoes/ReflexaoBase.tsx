@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { ImageBackground, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { addDoc, collection } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { ImageBackground, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth, db } from '../../../config/firebaseConfig';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
-import { FontAwesome } from '@expo/vector-icons';
-import { db, auth } from '../../config/firebaseConfig';
-import { collection, addDoc } from 'firebase/firestore';
 
 interface ReflexaoBaseProps {
   title: string;

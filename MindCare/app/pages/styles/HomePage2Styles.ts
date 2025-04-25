@@ -3,28 +3,25 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const homePage2Styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
   backgroundImage: {
     width: width,
     height: height,
     resizeMode: 'cover',
-    position: 'absolute',
-    
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 70,
   },
   greeting: {
-    fontSize: 20, 
-    fontWeight: "bold",    
-    color: 'white', 
-    marginLeft: 10,  
-    textAlign: 'center',      
-  },  
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  
 });
 
 export default homePage2Styles;

@@ -41,8 +41,7 @@ const PerfilStyles = StyleSheet.create({
     chartCard: {
       backgroundColor: 'white',
       borderRadius: 10,
-      
-      width: '100%',
+      padding: 20,
       alignItems: 'center',
     },
     chartTitle: {

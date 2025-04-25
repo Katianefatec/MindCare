@@ -3,7 +3,7 @@ import { ImageBackground, Text, View } from 'react-native';
 
 import calmaStyles from './css/CalmaStyles';
 import Calma from  '../../components/navigation/Calma'
-import BottomBar from '@/app/components/navigation/BottomBar';
+import BottomBar from '../../components/navigation/BottomBar';
 
 
 

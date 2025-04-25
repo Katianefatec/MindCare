@@ -1,4 +1,4 @@
-import meditarStyles from '@/app/pages/calma/css/MeditarStyles';
+import meditarStyles from '../../pages/calma/css/MeditarStyles';
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';

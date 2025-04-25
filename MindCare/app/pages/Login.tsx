@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TextInput, Pressable, Alert, Animated } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import loginStyles from './styles/LoginStyles';
-import { auth } from '../config/firebaseConfig';
 import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useRef, useState } from "react";
+import { Animated, Image, Pressable, SafeAreaView, ScrollView, Text, TextInput, View } from "react-native";
+import { auth } from '../../config/firebaseConfig';
+import loginStyles from './styles/LoginStyles';
 
 const Login = () => {
   const [email, setEmail] = useState("");

@@ -1,5 +1,5 @@
-import Aprendendo from "@/app/components/navigation/Aprendendo";
-import BottomBar from "@/app/components/navigation/BottomBar";
+import Aprendendo from "../../components/navigation/Aprendendo";
+import BottomBar from "../../components/navigation/BottomBar";
 import React from "react";
 import { Text, View } from "react-native";
 import aprenderStyles from "./css/AprenderStyles";

@@ -6,6 +6,7 @@ const emojiGridStyles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     marginTop: 20,
+    marginBottom: 20,
   },
   emojiButton: {
     alignItems: 'center',
@@ -14,12 +15,12 @@ const emojiGridStyles = StyleSheet.create({
   },
   emojiBox: {
     backgroundColor: 'white',
-    padding: 10,
+    // padding: 5,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 100, 
-    height: 100, 
+    width: 90, 
+    height: 80, 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

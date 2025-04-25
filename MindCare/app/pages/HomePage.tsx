@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, ScrollView } from 'react-native';
-import EmojiGrid from '../components/navigation/EmojiGrid';
-import BottomBar from '../components/navigation/BottomBar';
-import homePageStyles from './styles/HomePageStyles';
-import { auth, db } from '../config/firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { ImageBackground, ScrollView, Text, View } from 'react-native';
+import { auth, db } from '../../config/firebaseConfig';
+import BottomBar from '../components/navigation/BottomBar';
+import EmojiGrid from '../components/navigation/EmojiGrid';
+import homePageStyles from './styles/HomePageStyles';
 
 const HomePage = () => {
   const [userName, setUserName] = useState('');

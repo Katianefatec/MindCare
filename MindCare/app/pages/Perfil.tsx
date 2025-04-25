@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { auth, db } from '../config/firebaseConfig';
 import { useRouter } from 'expo-router';
-import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryLabel } from 'victory-native';
+import { collection, getDocs, query, Timestamp, where } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
 import Svg, { G, Text as SvgText } from 'react-native-svg';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryTheme } from 'victory-native';
+import { auth, db } from '../../config/firebaseConfig';
 import BottomBar from '../components/navigation/BottomBar';
 import PerfilStyles from './styles/PerfilStyles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import aprenderStyles from './calma/css/AprenderStyles';
 
 const Perfil = () => {
   const [emotionsData, setEmotionsData] = useState<EmotionData[]>([]);
@@ -108,6 +106,7 @@ const CustomLabel = (props: any) => {
         fontSize="12"
         fontWeight="bold"
         textAnchor="middle"
+        
       >
         {`${datum.y.toFixed(1)}%`}
       </SvgText>
@@ -135,10 +134,10 @@ const ChartCard: React.FC<ChartCardProps> = ({ emotionsData }) => {
     <View style={PerfilStyles.chartCard}>
       <Text style={PerfilStyles.chartTitle}>Ranking das emoções</Text>
       <Text style={PerfilStyles.chartSubtitle}>(últimos 7 dias)</Text>
-      <Svg width={Dimensions.get('window').width * 0.81} height={Dimensions.get('window').height * 0.46} style={{ marginRight: 10, marginLeft: -10}}>
+      <Svg width={Dimensions.get('window').width * 0.80} height={Dimensions.get('window').height * 0.46} style={{ marginRight: 10, marginLeft: -10}}>
         <VictoryChart
           theme={VictoryTheme.material}
-          domainPadding={{ x: 50 }}
+          domainPadding={{ x: 40 }}
         >
           <VictoryAxis
             tickValues={chartData.map(d => d.x)}  

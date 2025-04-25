@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Audio } from 'expo-av';
 import Svg, { Circle } from 'react-native-svg';
 
-import BottomBar from '@/app/components/navigation/BottomBar';
+import BottomBar from '../../components/navigation/BottomBar';
 import respirarStyles from './css/RespirarStyles';
 
 const Respirar = () => {

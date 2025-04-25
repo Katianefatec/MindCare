@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { ImageBackground, Text, View, TouchableOpacity, ScrollView, Alert, TextInput } from 'react-native';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { Alert, ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
+import { auth, db } from '../../../config/firebaseConfig';
 import BottomBar from '../../components/navigation/BottomBar';
 import reflexaoPageStyles from '../styles/ReflexaoPageStyles';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { db, auth } from '../../config/firebaseConfig';
-import moment from 'moment';
-import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 interface Reflexao {
   id: string;

@@ -3,15 +3,19 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const reflexaoPageStyles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
   backgroundImage: {    
     width: width,
     height: height,
     resizeMode: 'cover',
-    position: 'absolute',
+    // position: 'absolute',
   },
+  
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     alignItems: 'center',
     paddingBottom: 20,
