@@ -1,3 +1,20 @@
+# Welcome to your Expo app 👋
+
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+
+## Get started
+
+1. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+2. Start the app<h1 align="center">MindCare 🎯</h1>
+<H5 align="center"> Status do projeto: em andamento </H5>
+
+<hr> 
+
 ## Sumário
 
 - [Sobre o projeto](#Sobre-o-projeto)
@@ -16,7 +33,8 @@ O projeto MindCare é uma aplicação voltada para o bem-estar mental dos usuár
 
 Aqui estão as seguintes tecnologias que utilizamos:
 - React Native para desenvolvimento do front-end
-- Firebase como backend as a service
+- Firebase para backend
+- MySQL para banco de dados
 - Figma para prototipação
 - GitHub para controle de versão
 
@@ -50,10 +68,10 @@ Aqui estão as seguintes tecnologias que utilizamos:
 | Sprint | Período | Status | Relatório |
 |:-----:|:----------:|:---------:|:---------:|
 | 1 | 02/09/2024 - 09/09/2024 | Concluído | [Ver relatório](#Kick-off)|
-| 2 | 10/09/2024 - 04/10/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
-| 3 | 05/10/2024 - 25/10/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-2))| 
-| 4 | 26/10/2024 - 18/11/2024 | Planejado | [Ver relatório](#Sprint-3)|
-| 5 | 19/11/2024 - 06/12/2024 | Planejado | [Ver relatório](#Sprint-4)|
+| 2 | 09/09/2024 - 29/09/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-1)|
+| 3 | 04/10/2024 - 25/10/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-2)| 
+| 4 | 26/10/2024 - 15/11/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-3)|
+| 5 | 15/11/2024 - 06/12/2024 | Concluído | [Ver relatório](https://github.com/Katianefatec/MindCare/tree/sprint-4)|
 
 ## Protótipo navegável
 
@@ -67,18 +85,17 @@ Aqui estão as seguintes tecnologias que utilizamos:
 
 Para executar o projeto usando Expo, siga os passos abaixo:
 
-1. **Clone o repositório**:
-
-   ```bash
-   git clone https://github.com/Katianefatec/MindCare.git
-   cd MindCare
-
-2. **Instale as dependências**:
+1. **Instale as dependências**:
 
    ```bash
    npm install
 
-3.  **Execute o projeto**:
+2.  **Execute o projeto**:
 
    ```bash
-   npx expo start  
+   npx expo start
+
+
+
+
+  
