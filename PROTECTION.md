@@ -94,7 +94,7 @@
 ## Contato para Licenciamento:
 
 Para solicitar licenciamento comercial do MindCare, entre em contato:
-- **Email**: [seu-email@exemplo.com]
+- **Email**: katy_ane@yahoo.com.br
 - **Assunto**: "Licenciamento Comercial - MindCare"
 
 ## Observações Importantes:

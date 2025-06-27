@@ -31,9 +31,8 @@ export const COPYRIGHT_INFO = {
   license: 'Licença Proprietária - Uso comercial PROIBIDO',
   developmentYear: '2025',
   description: 'Aplicativo de Cuidados com a Saúde Mental e Bem-estar',
-  contactEmail: '[seu-email@exemplo.com]', // Substitua pelo seu email real
-  
-  // Texto para exibir na tela "Sobre" do app
+  contactEmail: 'katy_ane@yahoo.com.br',
+   
   aboutText: `MindCare v1.0.0
 Desenvolvido por Katiane Margiotti Soares
 © 2025 Todos os direitos reservados.
@@ -42,7 +41,7 @@ Este aplicativo foi criado para promover o bem-estar mental e oferecer ferrament
 
 PROTEÇÃO LEGAL: Este software é protegido por direitos autorais. O uso comercial é PROIBIDO sem autorização expressa e pagamento de royalties.`,
 
-  // Termos resumidos para exibir no app
+  
   termsText: `TERMOS DE USO:
 • Uso pessoal e educacional permitido
 • Uso comercial PROIBIDO sem autorização
@@ -72,6 +71,6 @@ Para licenciamento comercial, entre em contato através dos canais oficiais.`,
     • Pagamento de royalties ou participação nos lucros
     
     Para solicitar licenciamento comercial, entre em contato:
-    Email: [seu-email@exemplo.com]
+    Email: katy_ane@yahoo.com.br
   `
 };
