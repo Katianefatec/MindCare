@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "MindCare",
+    "slug": "mindcare",
+    "version": "1.0.0",
+    "scheme": "mindcare",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "permissions": ["CAMERA", "RECORD_AUDIO"]
+      
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Este aplicativo precisa acessar a câmera.",
+        "NSMicrophoneUsageDescription": "Este aplicativo precisa acessar o microfone."
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
+    ],
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "newArchEnabled": true
+  }
+}
