@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,7 +17,7 @@ const cadastroStyles = StyleSheet.create({
     flex: 1,
   },
   column: {
-    paddingVertical: 135,
+    paddingVertical: 10,
   },
   icon: {
     marginRight: 10,
@@ -32,6 +32,7 @@ const cadastroStyles = StyleSheet.create({
     paddingHorizontal: 14,
     marginBottom: 15,
     marginHorizontal: 38,
+    borderRadius: 8,
   },
   row2: {
     flexDirection: "row",
@@ -43,6 +44,7 @@ const cadastroStyles = StyleSheet.create({
     paddingHorizontal: 13,
     marginBottom: 15,
     marginHorizontal: 38,
+    borderRadius: 8,
   },
   row3: {
     flexDirection: "row",
@@ -54,6 +56,7 @@ const cadastroStyles = StyleSheet.create({
     paddingHorizontal: 13,
     marginBottom: 18,
     marginHorizontal: 38,
+    borderRadius: 8,
   },
   row4: {
     flexDirection: "row",
@@ -119,14 +122,32 @@ const cadastroStyles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 8,
     paddingHorizontal: 10,
-    marginBottom: 15,    
-   
+    marginBottom: 15,
+    borderRadius: 8,
   },
 
   errorMessage: {
-    color: 'red',
+    color: '#FF4444',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     marginTop: 10,
+    marginBottom: 10,
+    marginHorizontal: 38,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '500',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FF4444',
+    shadowColor: "#000000",
+    shadowOpacity: 0.1,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 3,
+    elevation: 3,
   },
 
   pickerContainer: {

@@ -1,8 +1,59 @@
-# Welcome to your Expo app 👋
+# MindCare 🧠💚
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<p align="center">
+  <img src="./assets/images/LogoMindCare.png" alt="MindCare Logo" width="200"/>
+</p>
 
-## Get started
+<h4 align="center">Aplicativo de Cuidados com a Saúde Mental e Bem-estar</h4>
+
+<p align="center">
+  <strong>© 2025 [SEU NOME AQUI]. Todos os direitos reservados.</strong>
+</p>
+
+---
+
+## � Sobre o Projeto
+
+O **MindCare** é um aplicativo móvel desenvolvido com React Native e Expo, focado em oferecer ferramentas e recursos para o cuidado da saúde mental e bem-estar emocional. O aplicativo inclui funcionalidades como:
+
+- 🧘‍♀️ Exercícios de meditação e relaxamento
+- 📊 Acompanhamento do humor e estado emocional
+- 💬 Chat de apoio e orientação
+- 📚 Conteúdo educativo sobre saúde mental
+- 🎵 Recursos de musicoterapia
+- 📝 Reflexões e journaling
+
+## 🚀 Tecnologias Utilizadas
+
+- **React Native** com Expo
+- **TypeScript**
+- **Firebase** (Authentication & Firestore)
+- **React Navigation**
+- **Vector Icons**
+
+## 📄 Direitos Autorais e Licença
+
+**Copyright © 2025 [SEU NOME AQUI]**
+
+Este software é protegido por direitos autorais. Todos os direitos reservados.
+
+### Licença
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+### Créditos
+- **Desenvolvedor Principal:** [SEU NOME AQUI]
+- **Design e UX/UI:** [SEU NOME AQUI]
+- **Data de Criação:** 2025
+
+### Uso e Distribuição
+- ✅ Uso pessoal e educacional permitido
+- ✅ Modificações permitidas com atribuição
+- ❌ Uso comercial requer autorização
+- ❌ Redistribuição sem créditos é proibida
+
+---
+
+## 🔧 Instalação e Configuração
 
 1. Install dependencies
 

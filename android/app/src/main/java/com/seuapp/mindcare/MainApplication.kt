@@ -1,4 +1,4 @@
-package com.mindcare
+package com.seuapp.mindcare
 
 import android.app.Application
 import android.content.res.Configuration
