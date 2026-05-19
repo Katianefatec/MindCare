@@ -260,9 +260,7 @@ Para uso comercial, licenciamento ou parcerias comerciais, entre em contato atra
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:katy_ane@yahoo.com.br)
 
 **Sobre a Desenvolvedora:**
-- 🎓 Formada em Análise e Desenvolvimento de Sistemas
-- 💻 Especialista em desenvolvimento mobile com React Native
-- 🎨 Designer UX/UI com foco em aplicações de saúde mental
+- 🎓 Formada em Desenvolvimento de Software Multiplataforma
 - 🧠 Apaixonada por tecnologias que promovem bem-estar
 
 </div>
